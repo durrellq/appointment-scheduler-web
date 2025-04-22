@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Dashboard - BostonSchedule</title>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div x-data="{
+        sidebarOpen: false,
+        currentTab: 'dashboard',
+
+        appointments: [
+            { id: 1, clientName: 'James Wilson', service: 'Classic Haircut', date: '2023-08-15', time: '10:00 AM', status: 'confirmed' },
+            { id: 2, clientName: 'Michael Brown', service: 'Fade with Design', date: '2023-08-15', time: '11:30 AM', status: 'confirmed' },
+            { id: 3, clientName: 'David Thomas', service: 'Beard Trim', date: '2023-08-15', time: '1:00 PM', status: 'pending' },
+            { id: 4, clientName: 'Robert Johnson', service: 'Full Service Combo', date: '2023-08-16', time: '9:30 AM', status: 'confirmed' },
+            { id: 5, clientName: 'Lamar Harris', service: 'Classic Haircut', date: '2023-08-16', time: '2:00 PM', status: 'confirmed' },
+            { id: 6, clientName: 'Eric Williams', service: 'Shape Up', date: '2023-08-17', time: '11:00 AM', status: 'pending' },
+            { id: 7, clientName: 'Kevin Davis', service: 'Hot Towel Shave', date: '2023-08-17', time: '3:30 PM', status: 'canceled' }
+        ],
+
+        services: [
+            { id: 1, name: 'Classic Haircut', duration: 30, price: 25.00, active: true },
+            { id: 2, name: 'Fade with Design', duration: 45, price: 35.00, active: true },
+            { id: 3, name: 'Beard Trim', duration: 15, price: 15.00, active: true },
+            { id: 4, name: 'Hot Towel Shave', duration: 30, price: 20.00, active: true },
+            { id: 5, name: 'Shape Up', duration: 20, price: 20.00, active: true },
+            { id: 6, name: 'Full Service Combo', duration: 60, price: 50.00, active: true },
+            { id: 7, name: 'Kid\'s Haircut', duration: 30, price: 20.00, active: true }
+        ],
+
+        businessHours: [
+            { day: 'Sunday', isOpen: false, openTime: '9:00 AM', closeTime: '5:00 PM' },
+            { day: 'Monday', isOpen: true, openTime: '9:00 AM', closeTime: '6:00 PM' },
+            { day: 'Tuesday', isOpen: true, openTime: '9:00 AM', closeTime: '6:00 PM' },
+            { day: 'Wednesday', isOpen: true, openTime: '9:00 AM', closeTime: '6:00 PM' },
+            { day: 'Thursday', isOpen: true, openTime: '9:00 AM', closeTime: '7:00 PM' },
+            { day: 'Friday', isOpen: true, openTime: '9:00 AM', closeTime: '7:00 PM' },
+            { day: 'Saturday', isOpen: true, openTime: '8:00 AM', closeTime: '5:00 PM' }
+        ],
+
+        newService: {
+            name: '',
+            duration: 30,
+            price: '',
+            active: true
+        },
+
+        showNewServiceModal: false,
+        showEditServiceModal: false,
+        editingService: null,
+
+        formatCurrency(amount) {
+            return '$' + parseFloat(amount).toFixed(2);
+        },
+
+        addService() {
+            if (this.newService.name && this.newService.price) {
+                this.services.push({
+                    id: this.services.length + 1,
+                    name: this.newService.name,
+                    duration: parseInt(this.newService.duration),
+                    price: parseFloat(this.newService.price),
+                    active: this.newService.active
+                });
+                this.newService = { name: '', duration: 30, price: '', active: true };
+                this.showNewServiceModal = false;
+            }
+        },
+
+        editService(service) {
+            this.editingService = { ...service };
+            this.showEditServiceModal = true;
+        },
+
+        saveEditedService() {
+            if (this.editingService.name && this.editingService.price) {
+                const index = this.services.findIndex(s => s.id === this.editingService.id);
+                if (index !== -1) {
+                    this.services[index] = { ...this.editingService };
+                }
+                this.showEditServiceModal = false;
+                this.editingService = null;
+            }
+        },
+
+        updateAppointmentStatus(appointmentId, status) {
+            const index = this.appointments.findIndex(a => a.id === appointmentId);
+            if (index !== -1) {
+                this.appointments[index].status = status;
+            }
+        },
+
+        initCharts() {
+            setTimeout(() => {
+                // Weekly appointment chart
+                const appointmentsCtx = document.getElementById('appointmentsChart').getContext('2d');
+                new Chart(appointmentsCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                        datasets: [{
+                            label: 'Appointments',
+                            data: [3, 5, 8, 6, 7, 9, 12],
+                            backgroundColor: '#14b8a6'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Service popularity chart
+                const servicesCtx = document.getElementById('servicesChart').getContext('2d');
+                new Chart(servicesCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Classic Haircut', 'Fade with Design', 'Beard Trim', 'Hot Towel Shave', 'Shape Up', 'Full Service Combo', 'Kid\'s Haircut'],
+                        datasets: [{
+                            data: [35, 20, 15, 10, 8, 7, 5],
+                            backgroundColor: [
+                                '#14b8a6',
+                                '#0d9488',
+                                '#0f766e',
+                                '#115e59',
+                                '#134e4a',
+                                '#7c3aed',
+                                '#6d28d9'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true
+                    }
+                });
+            }, 100);
+        }
+    }"
+    x-init="initCharts()"
+    class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow fixed w-full z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 focus:outline-none lg:hidden">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                        </svg>
+                    </button>
+                    <span class="text-primary-600 font-bold text-xl ml-4 lg:ml-0">BostonSchedule</span>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <span class="text-gray-700">Marcus Johnson</span>
+                    <div class="h-8 w-8 rounded-full bg-primary-600 text-white flex items-center justify-center">
+                        <span>MJ</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Mobile Sidebar Backdrop -->
+        <div
+            x-show="sidebarOpen"
+            @click="sidebarOpen = false"
+            class="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"
+            style="display: none;"
+        ></div>
+
+        <!-- Sidebar -->
+        <aside
+            :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}"
+            class="fixed inset-y-0 left-0 z-30 w-64 transform bg-primary-700 text-white transition duration-300 lg:translate-x-0 lg:static lg:inset-0"
+        >
+            <div class="flex items-center justify-center h-16">
+                <div class="flex items-center">
+                    <span class="text-white font-bold text-xl">Fresh Cuts</span>
+                </div>
+            </div>
+
+            <nav class="mt-6 px-4">
+                <a
+                    @click="currentTab = 'dashboard'"
+                    :class="{'bg-primary-900': currentTab === 'dashboard'}"
+                    class="block py-3 px-4 rounded-md transition duration-200 hover:bg-primary-600 cursor-pointer"
+                >
+                    <div class="flex items-center">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 11H5M19 11C20.1046 11 21 11.8954 21 13V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V13C3 11.8954 3.89543 11 5 11M19 11V9C19 7.89543 18.1046 7 17 7M5 11V9C5 7.89543 5.89543 7 7 7M7 7V5C7 3.89543 7.89543 3 9 3H15C16.1046 3 17 3.89543 17 5V7M7 7H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span class="ml-3">Dashboard</span>
+                    </div>
+                </a>
+
+                <a
+                    @click="currentTab = 'appointments'"
+                    :class="{'bg-primary-900': currentTab === 'appointments'}"
+                    class="mt-3 block py-3 px-4 rounded-md transition duration-200 hover:bg-primary-600 cursor-pointer"
+                >
+                    <div class="flex items-center">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span class="ml-3">Appointments</span>
+                    </div>
+                </a>
+
+                <a
+                    @click="currentTab = 'services'"
+                    :class="{'bg-primary-900': currentTab === 'services'}"
+                    class="mt-3 block py-3 px-4 rounded-md transition duration-200 hover:bg-primary-600 cursor-pointer"
+                >
+                    <div class="flex items-center">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 6.10457 9.89543 7 11 7H13C14.1046 7 15 6.10457 15 5M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span class="ml-3">Services</span>
+                    </div>
+                </a>
+
+                <a
+                    @click="currentTab = 'hours'"
+                    :class="{'bg-primary-900': currentTab === 'hours'}"
+                    class="mt-3 block py-3 px-4 rounded-md transition duration-200 hover:bg-primary-600 cursor-pointer"
+                >
+                    <div class="flex items-center">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span class="ml-3">Business Hours</span>
+                    </div>
+                </a>
+
+                <a
+                    @click="currentTab = 'analytics'"
+                    :class="{'bg-primary-900': currentTab === 'analytics'}"
+                    class="mt-3 block py-3 px-4 rounded-md transition duration-200 hover:bg-primary-600 cursor-pointer"
+                >
+                    <div class="flex items-center">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 19V13C9 11.8954 8.10457 11 7 11H5C3.89543 11 3 11.8954 3 13V19C3 20.1046 3.89543 21 5 21H7C8.10457 21 9 20.1046 9 19ZM9 19V9C9 7.89543 9.89543 7 11 7H13C14.1046 7 15 7.89543 15 9V19M9 19C9 20.1046 9.89543 21 11 21H13C14.1046 21 15 20.1046 15 19M15 19V5C15 3.89543 15.8954 3 17 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21H17C15.8954 21 15 20.1046 15 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span class="ml-3">Analytics</span>
+                    </div>
+                </a>
+
+                <a
+                    @click="currentTab = 'settings'"
+                    :class="{'bg-primary-900': currentTab === 'settings'}"
+                    class="mt-3 block py-3 px-4 rounded-md transition duration-200 hover:bg-primary-600 cursor-pointer"
+                >
+                    <div class="flex items-center">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.3246 4.31731C10.751 2.5609 13.249 2.5609 13.6754 4.31731C13.9508 5.45193 15.2507 5.99038 16.2478 5.38285C17.7913 4.44239 19.5576 6.2087 18.6172 7.75218C18.0096 8.74925 18.5481 10.0492 19.6827 10.3246C21.4391 10.751 21.4391 13.249 19.6827 13.6754C18.5481 13.9508 18.0096 15.2507 18.6172 16.2478C19.5576 17.7913 17.7913 19.5576 16.2478 18.6172C15.2507 18.0096 13.9508 18.5481 13.6754 19.6827C13.249 21.4391 10.751 21.4391 10.3246 19.6827C10.0492 18.5481 8.74926 18.0096 7.75219 18.6172C6.2087 19.5576 4.44239 17.7913 5.38285 16.2478C5.99038 15.2507 5.45193 13.9508 4.31731 13.6754C2.5609 13.249 2.5609 10.751 4.31731 10.3246C5.45193 10.0492 5.99037 8.74926 5.38285 7.75218C4.44239 6.2087 6.2087 4.44239 7.75219 5.38285C8.74926 5.99037 10.0492 5.45193 10.3246 4.31731Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span class="ml-3">Settings</span>
+                    </div>
+                </a>
+
+                <div class="mt-6 pt-6 border-t border-primary-600">
+                    <a href="#" class="block py-3 px-4 rounded-md transition duration-200 hover:bg-primary-600">
+                        <div class="flex items-center">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 16L21 12M21 12L17 8M21 12H9M13 16V17C13 18.6569 11.6569 20 10 20H6C4.34315 20 3 18.6569 3 17V7C3 5.34315 4.34315 4 6 4H10C11.6569 4 13 5.34315 13 7V8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span class="ml-3">Log out</span>
+                        </div>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="lg:pl-64 pt-16">
+            <!-- Dashboard -->
+            <div x-show="currentTab === 'dashboard'" class="p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <!-- Today's Stats -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Today</h3>
+                        <div class="text-3xl font-bold text-primary-600">3</div>
+                        <div class="text-gray-600">Appointments</div>
+                        <div class="mt-4 border-t pt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Confirmed</span>
+                                <span class="text-green-600 font-medium">2</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Pending</span>
+                                <span class="text-yellow-600 font-medium">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- This Week's Stats -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">This Week</h3>
+                        <div class="text-3xl font-bold text-primary-600">18</div>
+                        <div class="text-gray-600">Appointments</div>
+                        <div class="mt-4 border-t pt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Confirmed</span>
+                                <span class="text-green-600 font-medium">14</span>
+                            </div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Pending</span>
+                                <span class="text-yellow-600 font-medium">3</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Canceled</span>
+                                <span class="text-red-600 font-medium">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Stats -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Revenue</h3>
+                        <div class="text-3xl font-bold text-primary-600">$485</div>
+                        <div class="text-gray-600">This Week</div>
+                        <div class="mt-4 border-t pt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">This Month</span>
+                                <span class="text-green-600 font-medium">$1,840</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">vs Last Month</span>
+                                <span class="text-green-600 font-medium">+12%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Today's Appointments</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <template x-for="appointment in appointments.filter(a => a.date === '2023-08-15')" :key="appointment.id">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="font-medium text-gray-900" x-text="appointment.clientName"></div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap" x-text="appointment.service"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap" x-text="appointment.time"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span
+                                                    :class="{
+                                                        'bg-green-100 text-green-800': appointment.status === 'confirmed',
+                                                        'bg-yellow-100 text-yellow-800': appointment.status === 'pending',
+                                                        'bg-red-100 text-red-800': appointment.status === 'canceled'
+                                                    }"
+                                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                                    x-text="appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)"
+                                                ></span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <div class="flex space-x-2">
+                                                    <button
+                                                        @click="updateAppointmentStatus(appointment.id, 'confirmed')"
+                                                        class="text-green-600 hover:text-green-900"
+                                                    >
+                                                        Confirm
+                                                    </button>
+                                                    <button
+                                                        @click="updateAppointmentStatus(appointment.id, 'canceled')"
+                                                        class="text-red-600 hover:text-red-900"
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Weekly Appointments</h3>
+                        <canvas id="appointmentsChart" width="400" height="200"></canvas>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Service Popularity</h3>
+                        <canvas id="servicesChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointments Tab -->
+            <div x-show="currentTab === 'appointments'" class="p-6" style="display: none;">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Manage Appointments</h2>
+
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+                            <h3 class="text-lg font-semibold text-gray-700">All Appointments</h3>
+                            <div class="mt-3 md:mt-0 flex items-center space-x-2">
+                                <select class="border-gray-300 rounded-md shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50">
+                                    <option>All Statuses</option>
+                                    <option>Confirmed</option>
+                                    <option>Pending</option>
+                                    <option>Canceled</option>
+                                </select>
+                                <input type="date" class="border-gray-300 rounded-md shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50">
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <template x-for="appointment in appointments" :key="appointment.id">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="font-medium text-gray-900" x-text="appointment.clientName"></div>
+                                            </td>
+                                                                                        <td class="px-6 py-4 whitespace-nowrap" x-text="appointment.service"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap" x-text="appointment.date"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap" x-text="appointment.time"></td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <span
+                                                    :class="{
+                                                        'bg-green-100 text-green-800': appointment.status === 'confirmed',
+                                                        'bg-yellow-100 text-yellow-800': appointment.status === 'pending',
+                                                        'bg-red-100 text-red-800': appointment.status === 'canceled'
+                                                    }"
+                                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                                    x-text="appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)"
+                                                ></span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <div class="flex space-x-2">
+                                                    <button
+                                                        @click="updateAppointmentStatus(appointment.id, 'confirmed')"
+                                                        class="text-green-600 hover:text-green-900"
+                                                    >
+                                                        Confirm
+                                                    </button>
+                                                    <button
+                                                        @click="updateAppointmentStatus(appointment.id, 'canceled')"
+                                                        class="text-red-600 hover:text-red-900"
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Tab -->
+            <div x-show="currentTab === 'services'" class="p-6" style="display: none;">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Manage Services</h2>
+                    <button
+                        @click="showNewServiceModal = true"
+                        class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                    >
+                        Add New Service
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service Name</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <template x-for="service in services" :key="service.id">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="font-medium text-gray-900" x-text="service.name"></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap" x-text="service.duration + ' min'"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap" x-text="formatCurrency(service.price)"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                :class="service.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                                x-text="service.active ? 'Active' : 'Inactive'"
+                                            ></span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <div class="flex space-x-2">
+                                                <button
+                                                    @click="editService(service)"
+                                                    class="text-primary-600 hover:text-primary-900"
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    @click="service.active = !service.active"
+                                                    class="text-gray-600 hover:text-gray-900"
+                                                    x-text="service.active ? 'Deactivate' : 'Activate'"
+                                                ></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- New Service Modal -->
+                <div
+                    x-show="showNewServiceModal"
+                    class="fixed z-50 inset-0 overflow-y-auto"
+                    style="display: none;"
+                >
+                    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div
+                            @click="showNewServiceModal = false"
+                            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                        ></div>
+
+                        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Add New Service</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="service-name" class="block text-sm font-medium text-gray-700">Service Name</label>
+                                        <input
+                                            type="text"
+                                            id="service-name"
+                                            x-model="newService.name"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                        >
+                                    </div>
+
+                                    <div>
+                                        <label for="service-duration" class="block text-sm font-medium text-gray-700">Duration (minutes)</label>
+                                        <input
+                                            type="number"
+                                            id="service-duration"
+                                            x-model="newService.duration"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                        >
+                                    </div>
+
+                                    <div>
+                                        <label for="service-price" class="block text-sm font-medium text-gray-700">Price ($)</label>
+                                        <input
+                                            type="number"
+                                            id="service-price"
+                                            x-model="newService.price"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                        >
+                                    </div>
+
+                                    <div class="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            id="service-active"
+                                            x-model="newService.active"
+                                            class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                                        >
+                                        <label for="service-active" class="ml-2 block text-sm text-gray-900">
+                                            Active
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                <button
+                                    @click="addService"
+                                    type="button"
+                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                >
+                                    Add Service
+                                </button>
+                                <button
+                                    @click="showNewServiceModal = false"
+                                    type="button"
+                                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Service Modal -->
+                <div
+                    x-show="showEditServiceModal"
+                    class="fixed z-50 inset-0 overflow-y-auto"
+                    style="display: none;"
+                >
+                    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div
+                            @click="showEditServiceModal = false"
+                            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                        ></div>
+
+                        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Edit Service</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label for="edit-service-name" class="block text-sm font-medium text-gray-700">Service Name</label>
+                                        <input
+                                            type="text"
+                                            id="edit-service-name"
+                                            x-model="editingService.name"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                        >
+                                    </div>
+
+                                    <div>
+                                        <label for="edit-service-duration" class="block text-sm font-medium text-gray-700">Duration (minutes)</label>
+                                        <input
+                                            type="number"
+                                            id="edit-service-duration"
+                                            x-model="editingService.duration"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                        >
+                                    </div>
+
+                                    <div>
+                                        <label for="edit-service-price" class="block text-sm font-medium text-gray-700">Price ($)</label>
+                                        <input
+                                            type="number"
+                                            id="edit-service-price"
+                                            x-model="editingService.price"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                        >
+                                    </div>
+
+                                    <div class="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            id="edit-service-active"
+                                            x-model="editingService.active"
+                                            class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                                        >
+                                        <label for="edit-service-active" class="ml-2 block text-sm text-gray-900">
+                                            Active
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                <button
+                                    @click="saveEditedService"
+                                    type="button"
+                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                >
+                                    Save Changes
+                                </button>
+                                <button
+                                    @click="showEditServiceModal = false"
+                                    type="button"
+                                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Hours Tab -->
+            <div x-show="currentTab === 'hours'" class="p-6" style="display: none;">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Business Hours</h2>
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <p class="text-gray-700 mb-4">Set your regular business hours. Clients will only be able to book appointments during these times.</p>
+
+                    <div class="space-y-4">
+                        <template x-for="(hours, index) in businessHours" :key="index">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                                <div class="w-full sm:w-1/6 font-medium" x-text="hours.day"></div>
+
+                                <div class="mt-2 sm:mt-0 w-full sm:w-1/6">
+                                    <div class="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            :id="'is-open-' + index"
+                                            x-model="hours.isOpen"
+                                            class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                                        >
+                                        <label :for="'is-open-' + index" class="ml-2 block text-sm text-gray-900">
+                                            Open
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="mt-2 sm:mt-0 w-full sm:w-2/6">
+                                    <select
+                                        :id="'open-time-' + index"
+                                        x-model="hours.openTime"
+                                        :disabled="!hours.isOpen"
+                                        class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                    >
+                                        <option value="8:00 AM">8:00 AM</option>
+                                        <option value="8:30 AM">8:30 AM</option>
+                                        <option value="9:00 AM">9:00 AM</option>
+                                        <option value="9:30 AM">9:30 AM</option>
+                                        <option value="10:00 AM">10:00 AM</option>
+                                        <option value="10:30 AM">10:30 AM</option>
+                                        <option value="11:00 AM">11:00 AM</option>
+                                    </select>
+                                </div>
+
+                                <div class="mt-2 sm:mt-0 w-full sm:w-2/6">
+                                    <select
+                                        :id="'close-time-' + index"
+                                        x-model="hours.closeTime"
+                                        :disabled="!hours.isOpen"
+                                        class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                    >
+                                        <option value="4:00 PM">4:00 PM</option>
+                                        <option value="4:30 PM">4:30 PM</option>
+                                        <option value="5:00 PM">5:00 PM</option>
+                                        <option value="5:30 PM">5:30 PM</option>
+                                        <option value="6:00 PM">6:00 PM</option>
+                                        <option value="6:30 PM">6:30 PM</option>
+                                        <option value="7:00 PM">7:00 PM</option>
+                                        <option value="7:30 PM">7:30 PM</option>
+                                        <option value="8:00 PM">8:00 PM</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="mt-6">
+                        <button class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            Save Hours
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div x-show="currentTab === 'analytics'" class="p-6" style="display: none;">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Business Analytics</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Weekly Performance</h3>
+                        <canvas id="weeklyChart" width="400" height="200"></canvas>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Most Popular Services</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Classic Haircut</span>
+                                    <span class="text-gray-700">35%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 35%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Fade with Design</span>
+                                    <span class="text-gray-700">20%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 20%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Beard Trim</span>
+                                    <span class="text-gray-700">15%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 15%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Hot Towel Shave</span>
+                                    <span class="text-gray-700">10%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 10%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Other Services</span>
+                                    <span class="text-gray-700">20%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 20%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Busiest Days</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Saturday</span>
+                                    <span class="text-gray-700">24%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 24%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Friday</span>
+                                    <span class="text-gray-700">20%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 20%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Thursday</span>
+                                    <span class="text-gray-700">16%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 16%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Peak Hours</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">4:00 PM - 6:00 PM</span>
+                                    <span class="text-gray-700">30%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 30%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">11:00 AM - 1:00 PM</span>
+                                    <span class="text-gray-700">25%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 25%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">9:00 AM - 11:00 AM</span>
+                                    <span class="text-gray-700">20%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div class="bg-primary-600 h-2.5 rounded-full" style="width: 20%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Client Retention</h3>
+                        <div class="text-center">
+                            <div class="inline-flex items-center justify-center h-24 w-24 rounded-full border-8 border-primary-200">
+                                <span class="text-2xl font-bold text-primary-600">78%</span>
+                            </div>
+                            <p class="mt-4 text-gray-600">Return rate within 30 days</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div x-show="currentTab === 'settings'" class="p-6" style="display: none;">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Account Settings</h2>
+
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Business Information</h3>
+
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label for="business-name" class="block text-sm font-medium text-gray-700">Business Name</label>
+                                    <input
+                                        type="text"
+                                        id="business-name"
+                                        value="Fresh Cuts Barbershop"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                    >
+                                </div>
+
+                                <div>
+                                    <label for="business-type" class="block text-sm font-medium text-gray-700">Business Type</label>
+                                    <select
+                                        id="business-type"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                    >
+                                        <option>Barbershop</option>
+                                        <option>Hair Salon</option>
+                                        <option>Nail Salon</option>
+                                        <option>Spa</option>
+                                        <option>Massage Therapy</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="business-description" class="block text-sm font-medium text-gray-700">Description</label>
+                                <textarea
+                                    id="business-description"
+                                    rows="3"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                >Fresh Cuts is a premium barbershop in Roxbury specializing in classic cuts, fades, and designs. We pride ourselves on quality service and a welcoming atmosphere for all clients.</textarea>
+                                                        </div>
+
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label for="business-phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                                    <input
+                                        type="tel"
+                                        id="business-phone"
+                                        value="(617) 555-1234"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                    >
+                                </div>
+
+                                <div>
+                                    <label for="business-email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                                    <input
+                                        type="email"
+                                        id="business-email"
+                                        value="info@freshcutsbarbershop.com"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                    >
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="business-address" class="block text-sm font-medium text-gray-700">Address</label>
+                                <input
+                                    type="text"
+                                    id="business-address"
+                                    value="123 Dudley Street"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                >
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                <div>
+                                    <label for="business-city" class="block text-sm font-medium text-gray-700">City</label>
+                                    <input
+                                        type="text"
+                                        id="business-city"
+                                        value="Boston"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                    >
+                                </div>
+
+                                <div>
+                                    <label for="business-neighborhood" class="block text-sm font-medium text-gray-700">Neighborhood</label>
+                                    <select
+                                        id="business-neighborhood"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                    >
+                                        <option selected>Roxbury</option>
+                                        <option>Dorchester</option>
+                                        <option>Mattapan</option>
+                                        <option>Jamaica Plain</option>
+                                        <option>Hyde Park</option>
+                                        <option>South End</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="business-zip" class="block text-sm font-medium text-gray-700">ZIP Code</label>
+                                    <input
+                                        type="text"
+                                        id="business-zip"
+                                        value="02119"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <button class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                Save Business Info
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-white rounded-lg shadow overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Notification Settings</h3>
+
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input
+                                        id="new-appointment"
+                                        type="checkbox"
+                                        checked
+                                        class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                                    >
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="new-appointment" class="font-medium text-gray-700">New appointment notifications</label>
+                                    <p class="text-gray-500">Receive notifications when clients book new appointments.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input
+                                        id="appointment-reminder"
+                                        type="checkbox"
+                                        checked
+                                        class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                                    >
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="appointment-reminder" class="font-medium text-gray-700">Appointment reminders</label>
+                                    <p class="text-gray-500">Receive reminders about upcoming appointments.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input
+                                        id="cancellation"
+                                        type="checkbox"
+                                        checked
+                                        class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                                    >
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="cancellation" class="font-medium text-gray-700">Cancellation notifications</label>
+                                    <p class="text-gray-500">Receive notifications when appointments are canceled.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input
+                                        id="email-notifications"
+                                        type="checkbox"
+                                        checked
+                                        class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                                    >
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="email-notifications" class="font-medium text-gray-700">Email notifications</label>
+                                    <p class="text-gray-500">Receive all notifications via email.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input
+                                        id="sms-notifications"
+                                        type="checkbox"
+                                        checked
+                                        class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                                    >
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="sms-notifications" class="font-medium text-gray-700">SMS notifications</label>
+                                    <p class="text-gray-500">Receive all notifications via text message.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <button class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                Save Notification Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-white rounded-lg shadow overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Account Security</h3>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label for="current-password" class="block text-sm font-medium text-gray-700">Current Password</label>
+                                <input
+                                    type="password"
+                                    id="current-password"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="new-password" class="block text-sm font-medium text-gray-700">New Password</label>
+                                <input
+                                    type="password"
+                                    id="new-password"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirm New Password</label>
+                                <input
+                                    type="password"
+                                    id="confirm-password"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <button class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                Change Password
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // This would be replaced by actual API calls in a real implementation
+        document.addEventListener('alpine:init', () => {
+            // Additional initialization if needed
+        });
+    </script>
+</body>
+</html>
