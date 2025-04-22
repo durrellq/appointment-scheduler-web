@@ -4,7 +4,7 @@
      "description": "Small Business Appointment Scheduler",
      "main": "index.js",
      "scripts": {
-       "start": "live-server frontend --port=3000 --host=localhost",
+       "start": "live-server .",
        "test": "echo \"Error: no test specified\" && exit 1"
      },
      "keywords": [],
