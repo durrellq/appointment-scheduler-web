@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Black Boston Pages</title>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <style>
+        /* African-inspired pattern backgrounds */
+        .bg-pattern-1 {
+            background-color: #8B4513;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .bg-pattern-2 {
+            background-color: #DAA520;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        /* Rich colors inspired by African textiles */
+        .text-kente-gold { color: #DAA520; }
+        .text-ankara-red { color: #8B0000; }
+        .text-mud-cloth-brown { color: #8B4513; }
+        .bg-kente-gold { background-color: #DAA520; }
+        .bg-ankara-red { background-color: #8B0000; }
+        .bg-mud-cloth-brown { background-color: #8B4513; }
+        .border-kente-gold { border-color: #DAA520; }
+        .border-ankara-red { border-color: #8B0000; }
+        .border-mud-cloth-brown { border-color: #8B4513; }
+        .hover-bg-kente-gold:hover { background-color: #C19A2E; }
+        .hover-bg-ankara-red:hover { background-color: #9B3333; }
+        .hover-bg-mud-cloth-brown:hover { background-color: #9B5E34; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans" x-data="{
+    mobileMenuOpen: false,
+    activeTab: 'profile',
+    showChat: false,
+    chatMessage: '',
+    chatMessages: [],
+    showUploadModal: false,
+    showReminderModal: false,
+    reminderType: 'email',
+    reminderEmail: '',
+    reminderPhone: '',
+    showLoginModal: false,
+    username: '',
+    password: '',
+    isLoggedIn: false,
+    currentUser: null
+}">
+    <!-- Navigation Bar -->
+    <nav class="bg-mud-cloth-brown text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-xl font-bold">Black Boston Yellow Pages</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Home</a>
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Appointments</a>
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Services</a>
+                    <a href="account.html" class="bg-kente-gold hover:bg-opacity-90 text-white px-4 py-2 rounded-md text-sm font-medium">My Account</a>
+                    <a href="login.html" class="bg-ankara-red hover:bg-opacity-90 text-white px-4 py-2 rounded-md text-sm font-medium">Logout</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white hover:text-kente-gold focus:outline-none">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" class="md:hidden bg-mud-cloth-brown" style="display: none;">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-kente-gold hover:bg-opacity-20">Home</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-kente-gold hover:bg-opacity-20">Appointments</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-kente-gold hover:bg-opacity-20">Services</a>
+                <a href="account.html" class="block px-3 py-2 rounded-md text-base font-medium bg-kente-gold bg-opacity-20 hover:bg-opacity-30">My Account</a>
+                <a href="login.html" class="block px-3 py-2 rounded-md text-base font-medium bg-ankara-red bg-opacity-20 hover:bg-opacity-30">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Account Header Section -->
+    <div class="bg-pattern-1 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold">My Account</h1>
+            <p class="mt-2">Manage your profile, appointments, and preferences</p>
+        </div>
+    </div>
+
+    <!-- Account Content Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Tabs -->
+        <div class="border-b border-gray-200 mb-6">
+            <div class="flex flex-wrap -mb-px">
+                <button 
+                    @click="activeTab = 'profile'" 
+                    :class="{'border-b-2 border-ankara-red text-ankara-red': activeTab === 'profile', 'text-gray-500 hover:text-gray-700': activeTab !== 'profile'}"
+                    class="py-4 px-6 font-medium text-sm focus:outline-none">
+                    Profile
+                </button>
+                <button 
+                    @click="activeTab = 'appointments'" 
+                    :class="{'border-b-2 border-ankara-red text-ankara-red': activeTab === 'appointments', 'text-gray-500 hover:text-gray-700': activeTab !== 'appointments'}"
+                    class="py-4 px-6 font-medium text-sm focus:outline-none">
+                    Appointments
+                </button>
+                <button 
+                    @click="activeTab = 'payment'" 
+                    :class="{'border-b-2 border-ankara-red text-ankara-red': activeTab === 'payment', 'text-gray-500 hover:text-gray-700': activeTab !== 'payment'}"
+                    class="py-4 px-6 font-medium text-sm focus:outline-none">
+                    Payment Methods
+                </button>
+                <button 
+                    @click="activeTab = 'settings'" 
+                    :class="{'border-b-2 border-ankara-red text-ankara-red': activeTab === 'settings', 'text-gray-500 hover:text-gray-700': activeTab !== 'settings'}"
+                    class="py-4 px-6 font-medium text-sm focus:outline-none">
+                    Settings
+                </button>
+            </div>
+        </div>
+
+        <!-- Profile Tab Content -->
+        <div x-show="activeTab === 'profile'" class="grid md:grid-cols-3 gap-8">
+            <div class="md:col-span-1">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex flex-col items-center">
+                        <div class="h-24 w-24 rounded-full bg-kente-gold flex items-center justify-center text-white font-bold text-2xl mb-4">
+                            JD
+                        </div>
+                        <h3 class="text-xl font-bold text-mud-cloth-brown">James Davis</h3>
+                        <p class="text-gray-600">james.davis@example.com</p>
+                        <button class="mt-4 text-ankara-red text-sm font-medium">Change Profile Photo</button>
+                    </div>
+                    <div class="mt-6 border-t pt-4">
+                        <p class="text-gray-600 text-sm">Member since: January 2023</p>
+                        <p class="text-gray-600 text-sm">Last login: Today, 2:30 PM</p>
+                    </div>
+                </div>
+            </div>
+            <div class="md:col-span-2">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-mud-cloth-brown mb-4">Personal Information</h3>
+                    <form>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-gray-700 text-sm font-medium mb-2" for="first-name">First Name</label>
+                                <input type="text" id="first-name" value="James" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 text-sm font-medium mb-2" for="last-name">Last Name</label>
+                                <input type="text" id="last-name" value="Davis" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-medium mb-2" for="email">Email Address</label>
+                            <input type="email" id="email" value="james.davis@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-medium mb-2" for="phone">Phone Number</label>
+                            <input type="tel" id="phone" value="(617) 555-1234" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-medium mb-2" for="address">Address</label>
+                            <textarea id="address" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown">123 Main Street, Roxbury, Boston, MA 02119</textarea>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-ankara-red hover:bg-opacity-90 text-white px-4 py-2 rounded-md font-medium">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other tabs content would go here -->
+    </div>
+
+    
+    <div 
+        x-show="showChat" 
+        class="fixed bottom-0 right-0 z-50 w-full max-w-md bg-white shadow-lg rounded-t-lg overflow-hidden"
+        style="display: none;"
+    >
+        <div class="h-80 flex flex-col">
+            <div class="bg-mud-cloth-brown text-white p-4">
+                <div class="flex justify-between items-center">
+                    <h5 class="text-sm font-bold">Vendor Chat</h5>
+                    <button @click="showChat = false" class="text-gray-300 hover:text-white focus:outline-none">
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4">
+                <template x-for="(message, index) in chatMessages" :key="index">
+                    <div class="mb-2">
+                        <div class="bg-gray-100 rounded-xl px-3 py-2 text-sm">
+                            <span x-text="message"></span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            
+            <div class="bg-white p-3 border-t">
+                <div class="flex items-center">
+                    <input 
+                        type="text" 
+                        x-model="chatMessage" 
+                        @keydown.enter="chatMessages.push(chatMessage); chatMessage = ''"
+                        placeholder="Type your message..." 
+                        class="flex-1 border rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown"
+                    >
+                    <button 
+                        @click="chatMessages.push(chatMessage); chatMessage = ''"
+                        class="ml-2 bg-mud-cloth-brown text-white rounded-full p-2 focus:outline-none"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chat Button -->
+    <button 
+        @click="showChat = !showChat" 
+        class="fixed bottom-4 right-4 z-40 bg-ankara-red text-white rounded-full p-3 shadow-lg focus:outline-none"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+    </button>
+
+    <!-- Upload Documents Modal -->
+    <div 
+        x-show="showUploadModal" 
+        class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+        @click.self="showUploadModal = false"
+        style="display: none;"
+    >
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-mud-cloth-brown">Upload Documents</h3>
+                <button @click="showUploadModal = false" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <p class="text-gray-600 mb-4">Upload documents to share with vendors or service providers.</p>
+            
+            <div class="mb-4">
+                <label for="upload-vendor" class="block text-sm font-medium text-gray-700 mb-1">Select Vendor</label>
+                <select id="upload-vendor" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-ankara-red focus:border-transparent">
+                    <option value="" disabled selected>Choose a vendor...</option>
+                    <option value="divine-cuts">Divine Cuts Barbershop</option>
+                    <option value="beauty-salon">Natural Beauty Salon</option>
+                    <option value="realty">Boston Realty Partners</option>
+                </select>
+            </div>
+            
+            <div class="mb-6">
+                <label for="upload-type" class="block text-sm font-medium text-gray-700 mb-1">Document Type</label>
+                <select id="upload-type" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-ankara-red focus:border-transparent">
+                    <option value="" disabled selected>Select document type...</option>
+                    <option value="id">Identification</option>
+                    <option value="proof">Proof of Address</option>
+                    <option value="agreement">Service Agreement</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="mb-6">
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <p class="mt-1 text-sm text-gray-600">Drag and drop your files here, or click to select files</p>
+                    <input type="file" class="hidden" multiple>
+                    <button class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-ankara-red hover:bg-opacity-90">
+                        Select Files
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex justify-end">
+                <button @click="showUploadModal = false" class="mr-3 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    Cancel
+                </button>
+                <button class="px-4 py-2 bg-ankara-red text-white rounded-md text-sm font-medium hover:bg-opacity-90">
+                    Upload Files
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Set Reminder Modal -->
+    <div 
+        x-show="showReminderModal" 
+        class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+        @click.self="showReminderModal = false"
+        style="display: none;"
+    >
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-mud-cloth-brown">Set Appointment Reminder</h3>
+                <button @click="showReminderModal = false" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <p class="text-gray-600 mb-4">Choose how you would like to receive your appointment reminder.</p>
+            
+            <div class="mb-4">
+                <div class="flex items-center mb-3">
+                    <input 
+                        id="reminder-email" 
+                        name="reminder-type" 
+                        type="radio" 
+                        value="email" 
+                        x-model="reminderType"
+                        class="h-4 w-4 text-ankara-red focus:ring-ankara-red border-gray-300"
+                    >
+                    <label for="reminder-email" class="ml-2 block text-sm font-medium text-gray-700">
+                        Email Reminder
+                    </label>
+                </div>
+                
+                <div x-show="reminderType === 'email'" class="pl-6">
+                    <div class="mb-3">
+                        <label for="reminder-email-address" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="reminder-email-address" 
+                            x-model="reminderEmail"
+                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-ankara-red focus:border-transparent"
+                            placeholder="your@email.com"
+                        >
+                    </div>
+                </div>
+                
+                <div class="flex items-center mb-3">
+                    <input 
+                        id="reminder-text" 
+                        name="reminder-type" 
+                        type="radio" 
+                        value="text" 
+                        x-model="reminderType"
+                        class="h-4 w-4 text-ankara-red focus:ring-ankara-red border-gray-300"
+                    >
+                    <label for="reminder-text" class="ml-2 block text-sm font-medium text-gray-700">
+                        Text Message Reminder
+                    </label>
+                </div>
+                
+                <div x-show="reminderType === 'text'" class="pl-6">
+                    <div class="mb-3">
+                        <label for="reminder-phone-number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input 
+                            type="tel" 
+                            id="reminder-phone-number" 
+                            x-model="reminderPhone"
+                            class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-ankara-red focus:border-transparent"
+                            placeholder="(617) 555-1234"
+                        >
+                    </div>
+                </div>
+                
+                <div class="flex items-center">
+                    <input 
+                        id="reminder-both" 
+                        name="reminder-type" 
+                        type="radio" 
+                        value="both" 
+                        x-model="reminderType"
+                        class="h-4 w-4 text-ankara-red focus:ring-ankara-red border-gray-300"
+                    >
+                    <label for="reminder-both" class="ml-2 block text-sm font-medium text-gray-700">
+                        Both Email and Text
+                    </label>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label for="reminder-time" class="block text-sm font-medium text-gray-700 mb-1">Reminder Time</label>
+                <select id="reminder-time" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-ankara-red focus:border-transparent">
+                    <option value="day">1 Day Before</option>
+                    <option value="hours-24">24 Hours Before</option>
+                    <option value="hours-12">12 Hours Before</option>
+                    <option value="hours-2">2 Hours Before</option>
+                </select>
+            </div>
+            
+            <div class="flex justify-end">
+                <button @click="showReminderModal = false" class="mr-3 px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    Cancel
+                </button>
+                <button @click="showReminderModal = false" class="px-4 py-2 bg-ankara-red text-white rounded-md text-sm font-medium hover:bg-opacity-90">
+                    Set Reminder
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Login Modal -->
+    <div 
+        x-show="showLoginModal" 
+        class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+        @click.self="showLoginModal = false"
+        style="display: none;"
+    >
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-mud-cloth-brown">Login to Your Account</h3>
+                <button @click="showLoginModal = false" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="mb-4">
+                <label for="login-username" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input 
+                    type="email" 
+                    id="login-username" 
+                    x-model="username"
+                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-ankara-red focus:border-transparent"
+                    placeholder="your@email.com"
+                >
+            </div>
+            
+            <div class="mb-6">
+                <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input 
+                    type="password" 
+                    id="login-password" 
+                    x-model="password"
+                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-ankara-red focus:border-transparent"
+                    placeholder="••••••••"
+                >
+            </div>
+            
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center">
+                    <input 
+                        id="remember-me" 
+                        name="remember-me" 
+                        type="checkbox" 
+                        class="h-4 w-4 text-ankara-red focus:ring-ankara-red border-gray-300 rounded"
+                    >
+                    <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                        Remember me
+                    </label>
+                </div>
+                
+                <div class="text-sm">
+                    <a href="#" class="text-ankara-red hover:text-red-800">
+                        Forgot your password?
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <button 
+                    @click="isLoggedIn = true; currentUser = {name: 'James Davis', email: 'james.davis@example.com', phone: '(617) 555-1234'}; showLoginModal = false" 
+                    class="w-full bg-ankara-red text-white font-medium py-2 px-4 rounded-md hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ankara-red"
+                >
+                    Sign in
+                </button>
+            </div>
+            
+            <div class="text-sm text-center">
+                Don't have an account? 
+                <a href="#" class="text-ankara-red hover:text-red-800">
+                    Sign up now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-mud-cloth-brown text-white py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Black Boston Pages</h3>
+                    <p class="text-gray-300 text-sm">Connecting Boston's Black community with quality local businesses and services.</p>
+                </div>
+                <div>
+                    <h4 class="text-md font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-300 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Services</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">For Business Owners</a>

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Dashboard - Boston Black Entrepreneurs Appointment Scheduler</title>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Styles -->
+    <style>
+        /* African-inspired pattern backgrounds */
+        .bg-pattern-1 {
+            background-color: #8B4513;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Dashboard - Boston Black Entrepreneurs Appointment Scheduler</title>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Styles -->
+    <style>
+        /* African-inspired pattern backgrounds */
+        .bg-pattern-1 {
+            background-color: #8B4513;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .bg-pattern-2 {
+            background-color: #DAA520;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        /* Boston outline shape SVG */
+        .boston-outline {
+            filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+        }
+        /* Rich colors inspired by African textiles */
+        .text-kente-gold { color: #DAA520; }
+        .text-ankara-red { color: #8B0000; }
+        .text-mud-cloth-brown { color: #8B4513; }
+        .bg-kente-gold { background-color: #DAA520; }
+        .bg-ankara-red { background-color: #8B0000; }
+        .bg-mud-cloth-brown { background-color: #8B4513; }
+        .border-kente-gold { border-color: #DAA520; }
+        .border-ankara-red { border-color: #8B0000; }
+        .border-mud-cloth-brown { border-color: #8B4513; }
+        .hover-bg-kente-gold:hover { background-color: #C19A2E; }
+        .hover-bg-ankara-red:hover { background-color: #9B3333; }
+        .hover-bg-mud-cloth-brown:hover { background-color: #9B5E34; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans" x-data="{
+    mobileMenuOpen: false,
+    activeTab: 'overview',
+    upcomingAppointments: [
+        {id: 1, client: 'Jamal Wilson', service: 'Business Consultation', date: 'May 15, 2025', time: '10:30 AM', status: 'confirmed'},
+        {id: 2, client: 'Keisha Thompson', service: 'Marketing Plan Review', date: 'May 16, 2025', time: '1:00 PM', status: 'confirmed'},
+        {id: 3, client: 'Marcus Johnson', service: 'Financial Planning', date: 'May 17, 2025', time: '2:30 PM', status: 'pending'}
+    ],
+    pastAppointments: [
+        {id: 4, client: 'Aisha Brown', service: 'Business Consultation', date: 'May 10, 2025', time: '9:00 AM', status: 'completed'},
+        {id: 5, client: 'Terrell Davis', service: 'Marketing Plan Review', date: 'May 12, 2025', time: '4:00 PM', status: 'completed'},
+        {id: 6, client: 'Shanice Robinson', service: 'Financial Planning', date: 'May 13, 2025', time: '2:30 PM', status: 'no-show'}
+    ],
+    messages: [
+        {id: 1, from: 'Jamal Wilson', preview: 'Looking forward to our consultation session...', date: 'May 14, 2025', unread: true},
+        {id: 2, from: 'Keisha Thompson', preview: 'I have some questions about the marketing review...', date: 'May 14, 2025', unread: true},
+        {id: 3, from: 'Support Team', preview: 'Your account has been successfully verified...', date: 'May 13, 2025', unread: false}
+    ],
+    calendarView: 'week',
+    businessMetrics: {
+        totalAppointments: 32,
+        completionRate: 87,
+        averageRating: 4.8,
+        revenue: 4250
+    },
+    availabilityHours: {
+        monday: { enabled: true, start: '09:00', end: '17:00', isOpen: true },
+        tuesday: { enabled: true, start: '09:00', end: '17:00', isOpen: true },
+        wednesday: { enabled: true, start: '09:00', end: '17:00', isOpen: true },
+        thursday: { enabled: true, start: '09:00', end: '17:00', isOpen: true },
+        friday: { enabled: true, start: '09:00', end: '17:00', isOpen: true },
+        saturday: { enabled: false, start: '10:00', end: '15:00', isOpen: false },
+        sunday: { enabled: false, start: '10:00', end: '15:00', isOpen: false }
+    },
+    toggleDay(day) {
+        this.availabilityHours[day].isOpen = !this.availabilityHours[day].isOpen;
+    },
+    saveAvailability() {
+        alert('Availability settings saved successfully!');
+    },
+    generateCanvas(id, type) {
+        setTimeout(() => {
+            if (document.getElementById(id)) {
+                const ctx = document.getElementById(id).getContext('2d');
+                if (type === 'revenue') {
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                            datasets: [{
+                                label: 'Monthly Revenue ($)',
+                                data: [3200, 3800, 3500, 4100, 4250],
+                                borderColor: '#DAA520',
+                                backgroundColor: 'rgba(218, 165, 32, 0.1)',
+                                borderWidth: 2,
+                                tension: 0.3,
+                                fill: true
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                } else if (type === 'services') {
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Business Consultation', 'Marketing Plan', 'Financial Planning'],
+                            datasets: [{
+                                data: [45, 30, 25],
+                                backgroundColor: ['#8B4513', '#DAA520', '#8B0000'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }, 100);
+    }
+}">
+    <!-- Navigation Bar -->
+    <nav class="bg-mud-cloth-brown text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="h-10 w-10 mr-2">
+                            <!-- SVG Boston Outline -->
+                            <svg viewBox="0 0 100 100" class="boston-outline fill-current text-kente-gold">
+                                <path d="M30,10 C20,15 15,25 15,40 C15,60 25,70 25,80 C25,85 30,90 40,90 C50,90 60,85 70,80 C80,75 85,65 85,50 C85,35 80,25 70,20 C60,15 50,15 45,10 C40,5 35,8 30,10 Z" />
+                            </svg>
+                        </div>
+                        <span class="text-xl font-bold">BostonSchedule</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Home</a>
+                    <a href="booking.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Book Appointment</a>
+                    <a href="dashboard.html" class="px-3 py-2 rounded-md text-sm font-medium bg-kente-gold bg-opacity-30">Business Dashboard</a>
+                    <a href="services.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Manage Services</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex items-center md:hidden">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-opacity-80 focus:outline-none">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" class="md:hidden bg-mud-cloth-brown bg-opacity-95" style="display: none;">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-opacity-80">Home</a>
+                <a href="booking.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-opacity-80">Book Appointment</a>
+                <a href="dashboard.html" class="block px-3 py-2 rounded-md text-base font-medium bg-kente-gold bg-opacity-30">Business Dashboard</a>
+                <a href="services.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-opacity-80">Manage Services</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 class="text-3xl font-bold text-mud-cloth-brown mb-6">Business Dashboard</h1>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex">
+                    <button
+                        @click="activeTab = 'overview'"
+                        :class="{'border-ankara-red text-ankara-red': activeTab === 'overview', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'overview'}"
+                        class="w-1/4 py-4 px-1 text-center border-b-2 font-medium text-sm md:text-base transition duration-200"
+                    >
+                        Overview
+                    </button>
+                    <button
+                        @click="activeTab = 'appointments'; "
+                        :class="{'border-ankara-red text-ankara-red': activeTab === 'appointments', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'appointments'}"
+                        class="w-1/4 py-4 px-1 text-center border-b-2 font-medium text-sm md:text-base transition duration-200"
+                    >
+                        Appointments
+                    </button>
+                    <button
+                        @click="activeTab = 'messages'"
+                        :class="{'border-ankara-red text-ankara-red': activeTab === 'messages', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'messages'}"
+                        class="w-1/4 py-4 px-1 text-center border-b-2 font-medium text-sm md:text-base transition duration-200"
+                    >
+                        Messages
+                    </button>
+                    <button
+                        @click="activeTab = 'availability'"
+                        :class="{'border-ankara-red text-ankara-red': activeTab === 'availability', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'availability'}"
+                        class="w-1/4 py-4 px-1 text-center border-b-2 font-medium text-sm md:text-base transition duration-200"
+                    >
+                        Availability
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Overview Tab -->
+            <div x-show="activeTab === 'overview'" x-init="generateCanvas('revenueChart', 'revenue'); generateCanvas('servicesChart', 'services')" class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <h3 class="text-sm font-medium text-gray-500 mb-1">Total Appointments</h3>
+                        <p class="text-3xl font-bold text-mud-cloth-brown" x-text="businessMetrics.totalAppointments"></p>
+                        <p class="text-sm text-green-600 mt-1">+12% from last month</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <h3 class="text-sm font-medium text-gray-500 mb-1">Completion Rate</h3>
+                        <p class="text-3xl font-bold text-mud-cloth-brown" x-text="`${businessMetrics.completionRate}%`"></p>
+                        <p class="text-sm text-green-600 mt-1">+3% from last month</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <h3 class="text-sm font-medium text-gray-500 mb-1">Average Rating</h3>
+                        <p class="text-3xl font-bold text-mud-cloth-brown" x-text="businessMetrics.averageRating"></p>
+                        <div class="flex text-kente-gold mt-1">
+                            <span>★★★★★</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <h3 class="text-sm font-medium text-gray-500 mb-1">Monthly Revenue</h3>
+                        <p class="text-3xl font-bold text-mud-cloth-brown" x-text="`$${businessMetrics.revenue}`"></p>
+                        <p class="text-sm text-green-600 mt-1">+8% from last month</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <h3 class="text-lg font-medium text-mud-cloth-brown mb-4">Revenue Trend</h3>
+                        <div class="h-64">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                        <h3 class="text-lg font-medium text-mud-cloth-brown mb-4">Service Distribution</h3>
+                        <div class="h-64">
+                            <canvas id="servicesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointments Tab -->
+            <div x-show="activeTab === 'appointments'" class="p-6" style="display: none;">
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium text-mud-cloth-brown mb-4">Upcoming Appointments</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <template x-for="appointment in upcomingAppointments" :key="appointment.id">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" x-text="appointment.client"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="appointment.service"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="appointment.date"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="appointment.time"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span
+                                                :class="{
+                                                    'bg-green-100 text-green-800': appointment.status === 'confirmed',
+                                                    'bg-yellow-100 text-yellow-800': appointment.status === 'pending',
+                                                    'bg-red-100 text-red-800': appointment.status === 'cancelled'
+                                                }"
+                                                class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                                x-text="appointment.status"
+                                            ></span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-ankara-red hover:text-red-800 mr-3">Reschedule</button>
+                                            <button class="text-gray-600 hover:text-gray-900">Cancel</button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-medium text-mud-cloth-brown mb-4">Past Appointments</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <template x-for="appointment in pastAppointments" :key="appointment.id">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" x-text="appointment.client"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="appointment.service"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="appointment.date"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="appointment.time"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span
+                                                :class="{
+                                                    'bg-green-100 text-green-800': appointment.status === 'completed',
+                                                    'bg-red-100 text-red-800': appointment.status === 'no-show',
+                                                    'bg-gray-100 text-gray-800': appointment.status === 'cancelled'
+                                                }"
+                                                class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                                x-text="appointment.status"
+                                            ></span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-blue-600 hover:text-blue-900">View Details</button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Tab -->
+            <div x-show="activeTab === 'messages'" class="p-6" style="display: none;">
+                <div class="mb-4 flex justify-between items-center">
+                    <h3 class="text-lg font-medium text-mud-cloth-brown">Messages</h3>
+                    <button class="bg-ankara-red hover:bg-opacity-90 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                        New Message
+                    </button>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg">
+                    <template x-for="(message, index) in messages" :key="message.id">
+                        <div class="border-b border-gray-200 last:border-b-0">
+                            <div :class="message.unread ? 'bg-kente-gold bg-opacity-10' : ''" class="p-4 hover:bg-gray-50 cursor-pointer transition duration-150">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-start">
+                                        <div class="h-12 w-12 rounded-full bg-mud-cloth-brown text-white flex items-center justify-center font-bold text-lg mr-4"
+                                            x-text="message.from.charAt(0)">
+                                        </div>
+                                        <div>
+                                            <div class="flex items-center">
+                                                <h4 class="text-md font-semibold text-gray-900" x-text="message.from"></h4>
+                                                <span x-show="message.unread" class="ml-2 w-2 h-2 rounded-full bg-ankara-red"></span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mt-1" x-text="message.preview"></p>
+                                        </div>
+                                    </div>
+                                    <div class="text-xs text-gray-500" x-text="message.date"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Availability Tab -->
+            <div x-show="activeTab === 'availability'" class="p-6" style="display: none;">
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium text-mud-cloth-brown mb-4">Business Hours</h3>
+                    <p class="text-sm text-gray-600 mb-4">Set your regular working hours. Clients will only be able to book appointments during these times.</p>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center border-b border-gray-200 pb-4">
+                            <div class="w-32 font-medium">Monday</div>
+                            <div class="flex items-center">
+                                <label class="inline-flex items-center mr-6">
+                                    <input type="checkbox" x-model="availabilityHours.monday.isOpen" class="form-checkbox h-5 w-5 text-ankara-red">
+                                    <span class="ml-2 text-sm" x-text="availabilityHours.monday.isOpen ? 'Open' : 'Closed'"></span>
+                                </label>
+                                <div x-show="availabilityHours.monday.isOpen" class="flex items-center">
+                                    <input type="time" x-model="availabilityHours.monday.start" class="form-input border-gray-300 rounded-md text-sm">
+                                    <span class="mx-2">to</span>
+                                    <input type="time" x-model="availabilityHours.monday.end" class="form-input border-gray-300 rounded-md text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center border-b border-gray-200 pb-4">
+                            <div class="w-32 font-medium">Tuesday</div>
+                            <div class="flex items-center">
+                                <label class="inline-flex items-center mr-6">
+                                    <input type="checkbox" x-model="availabilityHours.tuesday.isOpen" class="form-checkbox h-5 w-5 text-ankara-red">
+                                    <span class="ml-2 text-sm" x-text="availabilityHours.tuesday.isOpen ? 'Open' : 'Closed'"></span>
+                                </label>
+                                <div x-show="availabilityHours.tuesday.isOpen" class="flex items-center">
+                                    <input type="time" x-model="availabilityHours.tuesday.start" class="form-input border-gray-300 rounded-md text-sm">
+                                    <span class="mx-2">to</span>
+                                    <input type="time" x-model="availabilityHours.tuesday.end" class="form-input border-gray-300 rounded-md text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center border-b border-gray-200 pb-4">
+                            <div class="w-32 font-medium">Wednesday</div>
+                            <div class="flex items-center">
+                                <label class="inline-flex items-center mr-6">
+                                    <input type="checkbox" x-model="availabilityHours.wednesday.isOpen" class="form-checkbox h-5 w-5 text-ankara-red">
+                                    <span class="ml-2 text-sm" x-text="availabilityHours.wednesday.isOpen ? 'Open' : 'Closed'"></span>
+                                </label>
+                                <div x-show="availabilityHours.wednesday.isOpen" class="flex items-center">
+                                    <input type="time" x-model="availabilityHours.wednesday.start" class="form-input border-gray-300 rounded-md text-sm">
+                                                                        <input type="time" x-model="availabilityHours.wednesday.start" class="form-input border-gray-300 rounded-md text-sm">
+                                    <span class="mx-2">to</span>
+                                    <input type="time" x-model="availabilityHours.wednesday.end" class="form-input border-gray-300 rounded-md text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center border-b border-gray-200 pb-4">
+                            <div class="w-32 font-medium">Thursday</div>
+                            <div class="flex items-center">
+                                <label class="inline-flex items-center mr-6">
+                                    <input type="checkbox" x-model="availabilityHours.thursday.isOpen" class="form-checkbox h-5 w-5 text-ankara-red">
+                                    <span class="ml-2 text-sm" x-text="availabilityHours.thursday.isOpen ? 'Open' : 'Closed'"></span>
+                                </label>
+                                <div x-show="availabilityHours.thursday.isOpen" class="flex items-center">
+                                    <input type="time" x-model="availabilityHours.thursday.start" class="form-input border-gray-300 rounded-md text-sm">
+                                    <span class="mx-2">to</span>
+                                    <input type="time" x-model="availabilityHours.thursday.end" class="form-input border-gray-300 rounded-md text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center border-b border-gray-200 pb-4">
+                            <div class="w-32 font-medium">Friday</div>
+                            <div class="flex items-center">
+                                <label class="inline-flex items-center mr-6">
+                                    <input type="checkbox" x-model="availabilityHours.friday.isOpen" class="form-checkbox h-5 w-5 text-ankara-red">
+                                    <span class="ml-2 text-sm" x-text="availabilityHours.friday.isOpen ? 'Open' : 'Closed'"></span>
+                                </label>
+                                <div x-show="availabilityHours.friday.isOpen" class="flex items-center">
+                                    <input type="time" x-model="availabilityHours.friday.start" class="form-input border-gray-300 rounded-md text-sm">
+                                    <span class="mx-2">to</span>
+                                    <input type="time" x-model="availabilityHours.friday.end" class="form-input border-gray-300 rounded-md text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center border-b border-gray-200 pb-4">
+                            <div class="w-32 font-medium">Saturday</div>
+                            <div class="flex items-center">
+                                <label class="inline-flex items-center mr-6">
+                                    <input type="checkbox" x-model="availabilityHours.saturday.isOpen" class="form-checkbox h-5 w-5 text-ankara-red">
+                                    <span class="ml-2 text-sm" x-text="availabilityHours.saturday.isOpen ? 'Open' : 'Closed'"></span>
+                                </label>
+                                <div x-show="availabilityHours.saturday.isOpen" class="flex items-center">
+                                    <input type="time" x-model="availabilityHours.saturday.start" class="form-input border-gray-300 rounded-md text-sm">
+                                    <span class="mx-2">to</span>
+                                    <input type="time" x-model="availabilityHours.saturday.end" class="form-input border-gray-300 rounded-md text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center">
+                            <div class="w-32 font-medium">Sunday</div>
+                            <div class="flex items-center">
+                                <label class="inline-flex items-center mr-6">
+                                    <input type="checkbox" x-model="availabilityHours.sunday.isOpen" class="form-checkbox h-5 w-5 text-ankara-red">
+                                    <span class="ml-2 text-sm" x-text="availabilityHours.sunday.isOpen ? 'Open' : 'Closed'"></span>
+                                </label>
+                                <div x-show="availabilityHours.sunday.isOpen" class="flex items-center">
+                                    <input type="time" x-model="availabilityHours.sunday.start" class="form-input border-gray-300 rounded-md text-sm">
+                                    <span class="mx-2">to</span>
+                                    <input type="time" x-model="availabilityHours.sunday.end" class="form-input border-gray-300 rounded-md text-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <button
+                            @click="saveAvailability"
+                            class="bg-ankara-red hover:bg-opacity-90 text-white px-6 py-2 rounded-lg font-medium"
+                        >
+                            Save Availability
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-10">
+                    <h3 class="text-lg font-medium text-mud-cloth-brown mb-4">Buffer Times & Time Slots</h3>
+                    <p class="text-sm text-gray-600 mb-4">Configure buffer times between appointments and define your time slot settings.</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-medium mb-2">Buffer Time</h4>
+                            <p class="text-sm text-gray-600 mb-4">Add extra time between appointments for preparation.</p>
+
+                            <div class="flex items-center">
+                                <select class="form-select border-gray-300 rounded-md text-sm">
+                                    <option value="0">No buffer</option>
+                                    <option value="5">5 minutes</option>
+                                    <option value="10">10 minutes</option>
+                                    <option value="15">15 minutes</option>
+                                    <option value="20">20 minutes</option>
+                                    <option value="30">30 minutes</option>
+                                </select>
+                                <p class="ml-2 text-sm text-gray-600">before and after each appointment</p>
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-medium mb-2">Time Slot Duration</h4>
+                            <p class="text-sm text-gray-600 mb-4">Define how time slots appear in the booking calendar.</p>
+
+                            <div class="flex items-center">
+                                <select class="form-select border-gray-300 rounded-md text-sm">
+                                    <option value="15">15 minutes</option>
+                                    <option value="30" selected>30 minutes</option>
+                                    <option value="45">45 minutes</option>
+                                    <option value="60">60 minutes</option>
+                                </select>
+                                <p class="ml-2 text-sm text-gray-600">intervals</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-mud-cloth-brown text-white mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">BostonSchedule</h3>
+                    <p class="text-sm">Empowering Black-owned businesses in Boston with modern scheduling solutions.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="hover:underline">Home</a></li>
+                        <li><a href="booking.html" class="hover:underline">Book Appointment</a></li>
+                        <li><a href="dashboard.html" class="hover:underline">Business Dashboard</a></li>
+                        <li><a href="services.html" class="hover:underline">Manage Services</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact Us</h3>
+                    <address class="text-sm not-italic">
+                        <p>Boston, MA</p>
+                        <p>Email: info@bostonschedule.com</p>
+                        <p>Phone: (617) 555-1234</p>
+                    </address>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-sm text-center">
+                <p>&copy; 2025 BostonSchedule. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

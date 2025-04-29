@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boston Black Entrepreneurs Appointment Scheduler</title>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Calendar Component -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <!-- Custom Styles -->
+    <style>
+        /* African-inspired pattern backgrounds */
+        .bg-pattern-1 {
+            background-color: #8B4513;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .bg-pattern-2 {
+            background-color: #DAA520;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        /* Rich colors inspired by African textiles */
+        .text-kente-gold { color: #DAA520; }
+        .text-ankara-red { color: #8B0000; }
+        .text-mud-cloth-brown { color: #8B4513; }
+        .bg-kente-gold { background-color: #DAA520; }
+        .bg-ankara-red { background-color: #8B0000; }
+        .bg-mud-cloth-brown { background-color: #8B4513; }
+        .border-kente-gold { border-color: #DAA520; }
+        .border-ankara-red { border-color: #8B0000; }
+        .border-mud-cloth-brown { border-color: #8B4513; }
+        .hover-bg-kente-gold:hover { background-color: #C19A2E; }
+        .hover-bg-ankara-red:hover { background-color: #9B3333; }
+        .hover-bg-mud-cloth-brown:hover { background-color: #9B5E34; }
+
+        /* Primary colors */
+        .bg-primary-100 { background-color: #F0E6D2; }
+        .bg-primary-600 { background-color: #8B4513; }
+        .bg-primary-700 { background-color: #7A3A0C; }
+        .text-primary-600 { color: #8B4513; }
+        .text-primary-900 { color: #5A2E0A; }
+        .focus\:ring-primary-500:focus { --tw-ring-color: rgba(139, 69, 19, 0.5); }
+        .focus\:border-primary-500:focus { border-color: #8B4513; }
+        .hover\:bg-primary-700:hover { background-color: #7A3A0C; }
+    </style>
+</head>
+<body class="bg-gray-50" x-data="bookingApp()">
+    <!-- Navigation Bar -->
+    <nav class="bg-mud-cloth-brown text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-xl font-bold">Boston Black Entrepreneurs</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80 bg-kente-gold">Find Services</a>
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">How It Works</a>
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">About Us</a>
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium border border-white hover:bg-kente-gold">Sign In</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="flex items-center md:hidden">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-gray-200 hover:bg-mud-cloth-brown focus:outline-none">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" class="md:hidden" style="display: none;">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium bg-kente-gold">Find Services</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-mud-cloth-brown">How It Works</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-mud-cloth-brown">About Us</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-mud-cloth-brown">Sign In</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Booking Container -->
+    <div class="max-w-4xl mx-auto my-10 bg-white rounded-lg shadow-lg overflow-hidden">
+        <!-- Progress Bar -->
+        <div class="bg-gray-100 px-6 py-4">
+            <div class="flex items-center">
+                <div class="flex items-center relative">
+                    <div :class="step >= 1 ? 'bg-primary-600' : 'bg-gray-300'" class="rounded-full h-8 w-8 flex items-center justify-center text-white">
+                        1
+                    </div>
+                    <div class="absolute top-0 -ml-10 text-center mt-10 w-32">
+                        <span class="text-xs font-medium" :class="step >= 1 ? 'text-primary-600' : 'text-gray-500'">Choose Business</span>
+                    </div>
+                </div>
+                <div class="flex-1 border-t-2 border-gray-300" :class="step > 1 ? 'border-primary-600' : 'border-gray-300'"></div>
+                <div class="flex items-center relative">
+                    <div :class="step >= 2 ? 'bg-primary-600' : 'bg-gray-300'" class="rounded-full h-8 w-8 flex items-center justify-center text-white">
+                        2
+                    </div>
+                    <div class="absolute top-0 -ml-10 text-center mt-10 w-32">
+                        <span class="text-xs font-medium" :class="step >= 2 ? 'text-primary-600' : 'text-gray-500'">Select Service</span>
+                    </div>
+                </div>
+                <div class="flex-1 border-t-2 border-gray-300" :class="step > 2 ? 'border-primary-600' : 'border-gray-300'"></div>
+                <div class="flex items-center relative">
+                    <div :class="step >= 3 ? 'bg-primary-600' : 'bg-gray-300'" class="rounded-full h-8 w-8 flex items-center justify-center text-white">
+                        3
+                    </div>
+                    <div class="absolute top-0 -ml-10 text-center mt-10 w-32">
+                        <span class="text-xs font-medium" :class="step >= 3 ? 'text-primary-600' : 'text-gray-500'">Pick Date & Time</span>
+                    </div>
+                </div>
+                <div class="flex-1 border-t-2 border-gray-300" :class="step > 3 ? 'border-primary-600' : 'border-gray-300'"></div>
+                <div class="flex items-center relative">
+                    <div :class="step >= 4 ? 'bg-primary-600' : 'bg-gray-300'" class="rounded-full h-8 w-8 flex items-center justify-center text-white">
+                        4
+                    </div>
+                    <div class="absolute top-0 -ml-10 text-center mt-10 w-32">
+                        <span class="text-xs font-medium" :class="step >= 4 ? 'text-primary-600' : 'text-gray-500'">Your Information</span>
+                    </div>
+                </div>
+                <div class="flex-1 border-t-2 border-gray-300" :class="step > 4 ? 'border-primary-600' : 'border-gray-300'"></div>
+                <div class="flex items-center relative">
+                    <div :class="step >= 5 ? 'bg-primary-600' : 'bg-gray-300'" class="rounded-full h-8 w-8 flex items-center justify-center text-white">
+                        5
+                    </div>
+                    <div class="absolute top-0 -ml-10 text-center mt-10 w-32">
+                        <span class="text-xs font-medium" :class="step >= 5 ? 'text-primary-600' : 'text-gray-500'">Confirm</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Choose Business -->
+        <div x-show="step === 1" class="p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">Choose a Business</h2>
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        placeholder="Search by name or service..." 
+                        class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        x-model="searchTerm"
+                    >
+                    <div class="absolute left-3 top-2.5 text-gray-400">
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="text-sm font-medium text-gray-700 mb-2">Filter by:</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button 
+                        @click="activeFilter = activeFilter === 'all' ? '' : 'all'" 
+                        :class="activeFilter === 'all' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-800'" 
+                        class="px-3 py-1 rounded-full text-sm font-medium hover:bg-opacity-80"
+                    >
+                        All
+                    </button>
+                    <button 
+                        @click="activeFilter = activeFilter === 'barber' ? '' : 'barber'" 
+                        :class="activeFilter === 'barber' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-800'" 
+                        class="px-3 py-1 rounded-full text-sm font-medium hover:bg-opacity-80"
+                    >
+                        Barber
+                    </button>
+                    <button 
+                        @click="activeFilter = activeFilter === 'hair' ? '' : 'hair'" 
+                        :class="activeFilter === 'hair' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-800'" 
+                        class="px-3 py-1 rounded-full text-sm font-medium hover:bg-opacity-80"
+                    >
+                        Hair Stylist
+                    </button>
+                    <button 
+                        @click="activeFilter = activeFilter === 'realty' ? '' : 'realty'" 
+                        :class="activeFilter === 'realty' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-800'" 
+                        class="px-3 py-1 rounded-full text-sm font-medium hover:bg-opacity-80"
+                    >
+                        Realty
+                    </button>
+                    <button 
+                        @click="activeFilter = activeFilter === 'consulting' ? '' : 'consulting'" 
+                        :class="activeFilter === 'consulting' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-800'" 
+                        class="px-3 py-1 rounded-full text-sm font-medium hover:bg-opacity-80"
+                    >
+                        Consulting
+                    </button>
+                    <button 
+                        @click="activeFilter = activeFilter === 'legal' ? '' : 'legal'" 
+                        :class="activeFilter === 'legal' ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-800'" 
+                        class="px-3 py-1 rounded-full text-sm font-medium hover:bg-opacity-80"
+                    >
+                        Legal
+                    </button>
+                </div>
+            </div>
+
+            <div class="space-y-4 mt-6">
+                <template x-for="business in filteredBusinesses" :key="business.id">
+                    <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow duration-200">
+                        <div class="flex flex-col sm:flex-row">
+                            <div class="sm:w-1/3 h-48 sm:h-auto bg-gray-200">
+                                <img :src="business.image" alt="Business Image" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4 flex-1">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-900" x-text="business.name"></h3>
+                                        <p class="text-sm text-gray-500 mb-2">
+                                            <span x-text="business.type"></span> · <span x-text="business.neighborhood"></span>
+                                        </p>
+                                        <div class="flex items-center mb-2">
+                                            <div class="flex text-amber-400">
+                                                <template x-for="i in 5">
+                                                    <svg class="w-4 h-4" :class="i <= business.rating ? 'text-amber-400 fill-current' : 'text-gray-300 fill-current'" viewBox="0 0 24 24">
+                                                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path>
+                                                    </svg>
+                                                </template>
+                                            </div>
+                                            <span class="text-xs text-gray-500 ml-1" x-text="`${business.reviewCount} reviews`"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-4" x-text="business.description"></p>
+                                <div class="flex justify-between items-center">
+                                    <div class="space-x-2">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800" x-show="business.availability > 5">
+                                            <svg class="mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
+                                                <circle cx="4" cy="4" r="3"></circle>
+                                            </svg>
+                                            High Availability
+                                        </span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800" x-show="business.availability <= 5 && business.availability > 1">
+                                            <svg class="mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
+                                                <circle cx="4" cy="4" r="3"></circle>
+                                            </svg>
+                                            Limited Spots
+                                        </span>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800" x-show="business.availability <= 1">
+                                            <svg class="mr-1.5 h-2 w-2 text-red-400" fill="currentColor" viewBox="0 0 8 8">
+                                                <circle cx="4" cy="4" r="3"></circle>
+                                            </svg>
+                                            Almost Full
+                                        </span>
+                                    </div>
+                                    <button
+                                        @click="selectBusiness(business)"
+                                        class="bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                                    >
+                                        Book Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Step 2: Select Service -->
+        <div x-show="step === 2" class="p-6" style="display: none;">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">Select a Service</h2>
+                <button
+                    @click="prevStep"
+                    class="text-primary-600 hover:text-primary-900"
+                >
+                    &larr; Back
+                </button>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center">
+                        <svg class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900" x-text="selectedBusiness.name"></h3>
+                        <p class="text-sm text-gray-500" x-text="selectedBusiness.type + ' · ' + selectedBusiness.neighborhood"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <template x-for="service in selectedBusiness.services" :key="service.id">
+                    <div 
+                        class="border border-gray-200 rounded-lg p-4 hover:border-primary-600 cursor-pointer transition-colors duration-200"
+                        :class="{'border-primary-600 bg-primary-50': selectedService.id === service.id}"
+                        @click="selectService(service)"
+                    >
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-medium text-gray-900" x-text="service.name"></h3>
+                                <p class="text-sm text-gray-500 mt-1" x-text="service.description"></p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-medium text-gray-900" x-text="formatCurrency(service.price)"></p>
+                                <p class="text-sm text-gray-500" x-text="`${service.duration} min`"></p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="mt-6">
+                <button
+                    @click="nextStep"
+                    class="w-full bg-primary-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                    :disabled="!selectedService.id"
+                    :class="{'opacity-50 cursor-not-allowed': !selectedService.id}"
+                >
+                    Continue
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Pick Date & Time -->
+        <div x-show="step === 3" class="p-6" style="display: none;">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">Pick a Date & Time</h2>
+                <button
+                    @click="prevStep"
+                    class="text-primary-600 hover:text-primary-900"
+                >
+                    &larr; Back
+                </button>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center">
+                        <svg class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900" x-text="selectedBusiness.name"></h3>
+                        <p class="text-sm text-gray-500">
+                            <span x-text="selectedService.name"></span> · 
+                            <span x-text="selectedService.duration + ' min'"></span> · 
+                            <span x-text="formatCurrency(selectedService.price)"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <div class="mb-4 text-center">
+                        <button @click="prevMonth" class="text-gray-600 hover:text-gray-900 mr-2">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span class="text-lg font-medium" x-text="currentMonthName + ' ' + currentYear"></span>
+                        <button @click="nextMonth" class="text-gray-600 hover:text-gray-900 ml-2">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-7 gap-px bg-gray-200">
+                        <template x-for="day in ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']">
+                            <div class="bg-gray-100 text-gray-500 text-xs font-medium text-center py-2">
+                                <span x-text="day"></span>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="grid grid-cols-7 gap-px bg-gray-200">
+                        <template x-for="(day, index) in calendarDays" :key="index">
+                            <div 
+                                class="bg-white h-12 flex items-center justify-center cursor-pointer"
+                                :class="{
+                                    'opacity-50 cursor-not-allowed': !day.available,
+                                    'bg-primary-100 text-primary-600': selectedDate === day.date && day.available,
+                                    'hover:bg-gray-100': day.available && selectedDate !== day.date
+                                }"
+                                @click="day.available && selectDate(day.date)"
+                            >
+                                <span x-text="day.dayNumber || ''"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-4" x-show="selectedDate">
+                        Available Times for <span x-text="selectedDate ? new Date(selectedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''"></span>
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2" x-show="selectedDate">
+                        <template x-for="timeSlot in availableTimeSlots" :key="timeSlot.id">
+                            <button
+                                class="py-2 px-4 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+                                :class="{'bg-primary-600 text-white border-primary-600 hover:bg-primary-700': selectedTimeSlot.id === timeSlot.id}"
+                                @click="selectTimeSlot(timeSlot)"
+                                x-text="timeSlot.time"
+                            ></button>
+                        </template>
+                    </div>
+                    <div x-show="!selectedDate" class="text-center text-gray-500 py-6">
+                        Select a date to view available time slots
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <button
+                    @click="nextStep"
+                    class="w-full bg-primary-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                    :disabled="!selectedDate || !selectedTimeSlot.id"
+                    :class="{'opacity-50 cursor-not-allowed': !selectedDate || !selectedTimeSlot.id}"
+                >
+                    Continue
+                </button>
+            </div>
+        </div>
+
+               <!-- Step 4: Your Information -->
+        <div x-show="step === 4" class="p-6" style="display: none;">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">Your Information</h2>
+                <button
+                    @click="prevStep"
+                    class="text-primary-600 hover:text-primary-900"
+                >
+                    &larr; Back
+                </button>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center">
+                        <svg class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900" x-text="selectedBusiness.name"></h3>
+                        <p class="text-sm text-gray-500">
+                            <span x-text="selectedService.name"></span> ·
+                            <span x-text="selectedDate ? (new Date(selectedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })) : ''"></span>
+                            ·
+                            <span x-text="selectedTimeSlot.time"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="first-name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                        <input
+                                type="text"
+                                id="first-name"
+                                x-model="firstName"
+                                class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                required
+                        >
+                    </div>
+                    <div>
+                        <label for="last-name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                        <input
+                                type="text"
+                                id="last-name"
+                                x-model="lastName"
+                                class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                required
+                        >
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input
+                                type="email"
+                                id="email"
+                                x-model="email"
+                                class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                required
+                        >
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input
+                                type="tel"
+                                id="phone"
+                                x-model="phone"
+                                class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                                required
+                        >
+                    </div>
+                </div>
+
+                <div>
+                    <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Special Notes (Optional)</label>
+                    <textarea
+                            id="notes"
+                            x-model="notes"
+                            rows="3"
+                            class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                    ></textarea>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <button
+                        @click="nextStep"
+                        class="w-full bg-primary-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                        :disabled="!firstName || !lastName || !email || !phone"
+                        :class="{'opacity-50 cursor-not-allowed': !firstName || !lastName || !email || !phone}"
+                >
+                    Review Booking
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 5: Confirm Booking -->
+        <div x-show="step === 5" class="p-6" style="display: none;">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">Confirm Your Booking</h2>
+                <button
+                        @click="prevStep"
+                        class="text-primary-600 hover:text-primary-900"
+                >
+                    &larr; Back
+                </button>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-primary-100 flex items-center justify-center">
+                        <svg class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900" x-text="selectedBusiness.name"></h3>
+                        <p class="text-sm text-gray-500"
+                           x-text="selectedBusiness.type + ' · ' + selectedBusiness.neighborhood"></p>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-200 pt-4">
+                    <dl class="divide-y divide-gray-200">
+                        <div class="py-3 flex justify-between">
+                            <dt class="text-sm font-medium text-gray-500">Service</dt>
+                            <dd class="text-sm font-medium text-gray-900" x-text="selectedService.name"></dd>
+                        </div>
+                        <div class="py-3 flex justify-between">
+                            <dt class="text-sm font-medium text-gray-500">Date & Time</dt>
+                            <dd class="text-sm font-medium text-gray-900">
+                                <span x-text="selectedDate ? (new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })) : ''"></span>,
+                                <span x-text="selectedTimeSlot.time"></span>
+                            </dd>
+                        </div>
+                        <div class="py-3 flex justify-between">
+                            <dt class="text-sm font-medium text-gray-500">Duration</dt>
+                            <dd class="text-sm font-medium text-gray-900" x-text="selectedService.duration + ' minutes'"></dd>
+                        </div>
+                        <div class="py-3 flex justify-between">
+                            <dt class="text-sm font-medium text-gray-500">Price</dt>
+                            <dd class="text-sm font-medium text-gray-900" x-text="formatCurrency(selectedService.price)"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-3">Your Information</h3>
+                <dl class="divide-y divide-gray-200">
+                    <div class="py-3 flex justify-between">
+                        <dt class="text-sm font-medium text-gray-500">Name</dt>
+                        <dd class="text-sm font-medium text-gray-900" x-text="firstName + ' ' + lastName"></dd>
+                    </div>
+                    <div class="py-3 flex justify-between">
+                        <dt class="text-sm font-medium text-gray-500">Email</dt>
+                        <dd class="text-sm font-medium text-gray-900" x-text="email"></dd>
+                    </div>
+                    <div class="py-3 flex justify-between">
+                        <dt class="text-sm font-medium text-gray-500">Phone</dt>
+                        <dd class="text-sm font-medium text-gray-900" x-text="phone"></dd>
+                    </div>
+                    <div class="py-3" x-show="notes">
+                        <dt class="text-sm font-medium text-gray-500 mb-1">Special Notes</dt>
+                        <dd class="text-sm text-gray-900" x-text="notes"></dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="mb-6">
+                <div class="flex items-center mb-4">
+                    <input
+                            id="policy-checkbox"
+                            name="policy-checkbox"
+                            type="checkbox"
+                            x-model="policyAccepted"
+                            class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                    >
+                    <label for="policy-checkbox" class="ml-2 block text-sm text-gray-900">
+                        I agree to the <a href="#" class="text-primary-600 hover:text-primary-900">cancellation policy</a>
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row sm:space-x-4">
+                <button
+                        @click="submitBooking"
+                        class="w-full mb-3 sm:mb-0 bg-primary-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                        :disabled="!policyAccepted"
+                        :class="{'opacity-50 cursor-not-allowed': !policyAccepted}"
+                >
+                    Confirm Booking
+                </button>
+                <button
+                        @click="prevStep"
+                        class="w-full border border-gray-300 rounded-md shadow-sm py-2 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                >
+                    Edit Information
+                </button>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div
+                x-show="bookingSuccess"
+                class="fixed inset-0 flex items-center justify-center z-50"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 transform scale-90"
+                x-transition:enter-end="opacity-100 transform scale-100"
+                x-transition:leave="transition ease-in duration-300"
+                x-transition:leave-start="opacity-100 transform scale-100"
+                x-transition:leave-end="opacity-0 transform scale-90"
+                style="display: none;">
+
+            <div class="absolute inset-0 bg-black opacity-50"></div>
+
+            <div class="bg-white p-8 max-w-md mx-auto rounded-lg shadow-xl relative z-10">
+                <div class="text-center">
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                        <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="mt-3 text-lg font-medium text-gray-900">Booking Confirmed!</h3>
+                    <p class="mt-2 text-sm text-gray-500">
+                        Your appointment has been booked successfully. We've sent a confirmation email to your inbox.
+                    </p>
+                    <div class="mt-4 bg-gray-50 p-4 rounded-md">
+                        <p class="text-sm font-medium text-gray-900">Booking Reference:</p>
+                        <p class="text-lg font-bold text-primary-600 mt-1" x-text="bookingReference"></p>
+                    </div>
+                    <div class="mt-5">
+                        <button
+                                @click="resetBooking"
+                                class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:text-sm"
+                        >
+                            Back to Home
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer with Newsletter Signup -->
+    <footer class="bg-mud-cloth-brown text-white mt-12 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Boston Black Entrepreneurs</h3>
+                    <p class="mb-4 text-sm">Supporting Black-owned businesses in the Boston area through streamlined appointment scheduling and business management.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-white hover:text-kente-gold">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-kente-gold">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-kente-gold">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-kente-gold">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-kente-gold">Find Services</a></li>
+                        <li><a href="#" class="hover:text-kente-gold">Register Your Business</a></li>
+                        <li><a href="#" class="hover:text-kente-gold">About Us</a></li>
+                        <li><a href="#" class="hover:text-kente-gold">FAQs</a></li>
+                        <li><a href="#" class="hover:text-kente-gold">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Stay Updated</h3>
+                    <p class="mb-4 text-sm">Join our newsletter for updates on new businesses, features, and community events.</p>
+                    <form class="space-y-3">
+                        <div>
+                            <input type="email" placeholder="Your email address" class="w-full px-4 py-2 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-kente-gold">
+                        </div>
+                        <button type="submit" class="w-full bg-kente-gold hover:bg-opacity-90 text-gray-900 font-bold py-2 px-4 rounded-md">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-white/20 mt-8 pt-8 text-center text-sm">
+                <p>&copy; 2025 Boston Black Entrepreneurs. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Alpine.js Application Data -->
+    <script>
+        function bookingApp() {
+            return {
+                step: 1,
+                mobileMenuOpen: false,
+                searchTerm: '',
+                activeFilter: 'all',
+                selectedBusiness: {},
+                selectedService: {},
+                selectedDate: '',
+                selectedTimeSlot: {},
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: '',
+                notes: '',
+                policyAccepted: false,
+                bookingSuccess: false,
+                bookingReference: '',
+                currentMonth: new Date().getMonth(),
+                currentYear: new Date().getFullYear(),
+
+                get currentMonthName() {
+                    return new Date(this.currentYear, this.currentMonth, 1).toLocaleString('default', { month: 'long' });
+                },
+
+                get calendarDays() {
+                    const days = [];
+                    const firstDay = new Date(this.currentYear, this.currentMonth, 1).getDay();
+                    const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+
+                    // Add empty spaces for days before the first day of the month
+                    for (let i = 0; i < firstDay; i++) {
+                        days.push({});
+                    }
+
+                    // Add actual days of the month
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const date = new Date(this.currentYear, this.currentMonth, i).toISOString().split('T')[0];
+                        days.push({
+                            dayNumber: i,
+                            date: date,
+                            available: this.isDateAvailable(date)
+                        });
+                    }
+
+                    return days;
+                },
+
+                get availableTimeSlots() {
+                    // This would normally come from an API based on the selected date and service
+                    return [
+                        { id: 1, time: '9:00 AM' },
+                        { id: 2, time: '10:00 AM' },
+                        { id: 3, time: '11:00 AM' },
+                        { id: 4, time: '1:00 PM' },
+                        { id: 5, time: '2:00 PM' },
+                        { id: 6, time: '3:00 PM' },
+                        { id: 7, time: '4:00 PM' }
+                    ];
+                },
+
+                get filteredBusinesses() {
+                    // Sample data for businesses that would normally come from an API
+                    const businesses = [
+                        {
+                            id: 1,
+                            name: 'Nubian Cuts',
+                            type: 'Barber',
+                            neighborhood: 'Roxbury',
+                            description: 'Premium barbershop specializing in all types of hair textures and styles.',
+                            rating: 4.8,
+                            reviewCount: 124,
+                            availability: 8,
+                            image: 'https://via.placeholder.com/300x200/8B4513/FFFFFF?text=Nubian+Cuts',
+                            services: [
+                                { id: 1, name: 'Haircut', description: 'Classic haircut with clippers and scissors', price: 30, duration: 30 },
+                                { id: 2, name: 'Haircut & Beard Trim', description: 'Full service haircut and beard grooming', price: 45, duration: 45 },
+                                { id: 3, name: 'Shape Up', description: 'Quick edge up and line up', price: 20, duration: 20 },
+                                { id: 4, name: 'Hot Towel Shave', description: 'Traditional straight razor shave with hot towel', price: 35, duration: 30 }
+                            ]
+                        },
+                        {
+                            id: 2,
+                            name: 'Crown & Glory Hair Studio',
+                            type: 'Hair Stylist',
+                            neighborhood: 'Dorchester',
+                            description: 'Natural hair salon specializing in protective styles, braids, locs, and natural hair care.',
+                            rating: 4.9,
+                            reviewCount: 218,
+                            availability: 3,
+                            image: 'https://via.placeholder.com/300x200/DAA520/FFFFFF?text=Crown+%26+Glory',
+                            services: [
+                                { id: 1, name: 'Box Braids', description: 'Classic box braids in various sizes', price: 150, duration: 240 },
+                                { id: 2, name: 'Twist Out', description: 'Twist out style for natural hair', price: 75, duration: 90 },
+                                { id: 3, name: 'Wash & Set', description: 'Shampoo, deep condition, and style', price: 65, duration: 60 },
+                                { id: 4, name: 'Loc Maintenance', description: 'Retwist and styling for locs', price: 85, duration: 120 }
+                            ]
+                        },
+                        {
+                            id: 3,
+                            name: 'Boston Legacy Realty',
+                            type: 'Realty',
+                            neighborhood: 'Mattapan',
+                            description: 'Full-service real estate agency specializing in Boston neighborhoods with deep community knowledge.',
+                            rating: 4.7,
+                            reviewCount: 86,
+                            availability: 5,
+                            image: 'https://via.placeholder.com/300x200/8B0000/FFFFFF?text=Boston+Legacy+Realty',
+                            services: [
+                                { id: 1, name: 'Property Consultation', description: 'Initial consultation to discuss your property needs', price: 0, duration: 60 },
+                                { id: 2, name: 'Home Buying Strategy', description: 'Develop a personalized home buying strategy', price: 150, duration: 90 },
+                                { id: 3, name: 'Investment Property Analysis', description: 'Analysis of potential investment properties', price: 200, duration: 120 },
+                                { id: 4, name: 'Home Selling Consultation', description: 'Strategy session for selling your home', price: 100, duration: 60 }
+                            ]
+                        },
+                        {
+                            id: 4,
+                            name: 'Ujamaa Consulting',
+                            type: 'Consulting',
+                            neighborhood: 'Jamaica Plain',
+                            description: 'Business strategy consulting firm focused on helping small businesses and startups grow.',
+                            rating: 4.6,
+                            reviewCount: 53,
+                            availability: 10,
+                            image: 'https://via.placeholder.com/300x200/8B4513/FFFFFF?text=Ujamaa+Consulting',
+                            services: [
+                                { id: 1, name: 'Business Assessment', description: 'Comprehensive assessment of your business', price: 250, duration: 120 },
+                                { id: 2, name: 'Marketing Strategy', description: 'Develop a customized marketing strategy', price: 300, duration: 90 },
+                                { id: 3, name: 'Financial Planning', description: 'Business financial planning and projections', price: 350, duration: 120 },
+                                { id: 4, name: 'Startup Mentoring', description: 'One-on-one mentoring for new entrepreneurs', price: 200, duration: 60 }
+                            ]
+                        },
+                        {
+                            id: 5,
+                            name: 'Paramount Legal Services',
+                            type: 'Legal',
+                            neighborhood: 'Back Bay',
+                            description: 'Legal services focused on small business formation, contracts, and intellectual property protection.',
+                            rating: 4.9,
+                            reviewCount: 76,
+                            availability: 2,
+                            image: 'https://via.placeholder.com/300x200/DAA520/FFFFFF?text=Paramount+Legal',
+                            services: [
+                                { id: 1, name: 'Legal Consultation', description: 'Initial consultation to discuss your legal needs', price: 150, duration: 60 },
+                                { id: 2, name: 'Business Formation', description: 'LLC or Corporation formation with all necessary paperwork', price: 500, duration: 90 },
+                                { id: 3, name: 'Contract Review', description: 'Review and consultation on business contracts', price: 300, duration: 60 },
+                                { id: 4, name: 'Trademark Registration', description: 'Complete trademark registration process', price: 750, duration: 60 }
+                            ]
+                        }
+                    ];
+
+                    let filtered = businesses;
+
+                    if (this.searchTerm.trim() !== '') {
+                        const search = this.searchTerm.toLowerCase();
+                        filtered = filtered.filter(business =>
+                            business.name.toLowerCase().includes(search) ||
+                            business.type.toLowerCase().includes(search) ||
+                            business.neighborhood.toLowerCase().includes(search) ||
+                            business.services.some(service => service.name.toLowerCase().includes(search))
+                        );
+                    }
+
+                    if (this.activeFilter !== 'all' && this.activeFilter !== '') {
+                        filtered = filtered.filter(business =>
+                            business.type.toLowerCase().includes(this.activeFilter.toLowerCase())
+                        );
+                    }
+
+                    return filtered;
+                },
+
+                // Methods
+                nextStep() {
+                    this.step++;
+                    window.scrollTo(0, 0);
+                },
+
+                prevStep() {
+                    this.step--;
+                    window.scrollTo(0, 0);
+                },
+
+                selectBusiness(business) {
+                    this.selectedBusiness = business;
+                    this.nextStep();
+                },
+
+                selectService(service) {
+                    this.selectedService = service;
+                },
+
+                selectDate(date) {
+                    this.selectedDate = date;
+                    this.selectedTimeSlot = {};
+                },
+
+                selectTimeSlot(timeSlot) {
+                    this.selectedTimeSlot = timeSlot;
+                },
+
+                isDateAvailable(date) {
+                    // This would normally check with the API if the date has availability
+                    // For demonstration purposes, let's assume weekdays are available
+                    const dayOfWeek = new Date(date).getDay();
+                    return dayOfWeek !== 0; // Sunday not available
+                },
+
+                prevMonth() {
+                    if (this.currentMonth === 0) {
+                        this.currentMonth = 11;
+                        this.currentYear--;
+                    } else {
+                        this.currentMonth--;
+                    }
+                },
+
+                nextMonth() {
+                    if (this.currentMonth === 11) {
+                        this.currentMonth = 0;
+                        this.currentYear++;
+                    } else {
+                        this.currentMonth++;
+                    }
+                },
+
+                formatCurrency(amount) {
+                    return '$' + amount.toFixed(2);
+                },
+
+                submitBooking() {
+                    // This would normally send the booking data to the API
+                    this.bookingReference = 'BBE-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                    setTimeout(() => {
+                        this.bookingSuccess = true;
+                    }, 1000);
+                },
+
+                resetBooking() {
+                    this.step = 1;
+                    this.selectedBusiness = {};
+                    this.selectedService = {};
+                    this.selectedDate = '';
+                    this.selectedTimeSlot = {};
+                    this.firstName = '';
+                    this.lastName = '';
+                    this.email = '';
+                    this.phone = '';
+                    this.notes = '';
+                    this.policyAccepted = false;
+                    this.bookingSuccess = false;
+                    window.scrollTo(0, 0);
+                }
+            };
+        }
+    </script>
+</body>
+</html>

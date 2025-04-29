@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - Boston Black Entrepreneurs Appointment Scheduler</title>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Custom Styles -->
+    <style>
+        /* African-inspired pattern backgrounds */
+        .bg-pattern-1 {
+            background-color: #8B4513;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .bg-pattern-2 {
+            background-color: #DAA520;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        /* Boston outline shape SVG */
+        .boston-outline {
+            filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+        }
+        /* Rich colors inspired by African textiles */
+        .text-kente-gold { color: #DAA520; }
+        .text-ankara-red { color: #8B0000; }
+        .text-mud-cloth-brown { color: #8B4513; }
+        .bg-kente-gold { background-color: #DAA520; }
+        .bg-ankara-red { background-color: #8B0000; }
+        .bg-mud-cloth-brown { background-color: #8B4513; }
+        .border-kente-gold { border-color: #DAA520; }
+        .border-ankara-red { border-color: #8B0000; }
+        .border-mud-cloth-brown { border-color: #8B4513; }
+        .hover-bg-kente-gold:hover { background-color: #C19A2E; }
+        .hover-bg-ankara-red:hover { background-color: #9B3333; }
+        .hover-bg-mud-cloth-brown:hover { background-color: #9B5E34; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans" x-data="{
+    mobileMenuOpen: false,
+    business: null,
+    services: [
+        {id: 1, name: 'Business Consultation', duration: 60, price: 150, description: 'One-on-one business strategy session'},
+        {id: 2, name: 'Marketing Plan Review', duration: 45, price: 120, description: 'Analysis and feedback on your marketing strategy'},
+        {id: 3, name: 'Financial Planning', duration: 90, price: 200, description: 'Budget review and financial projection planning'}
+    ],
+    selectedService: null,
+    selectedDate: null,
+    availableTimes: ['9:00 AM', '10:30 AM', '1:00 PM', '2:30 PM', '4:00 PM'],
+    selectedTime: null,
+    step: 1,
+    contactInfo: {
+        name: '',
+        email: '',
+        phone: '',
+        notes: ''
+    },
+    businessSearch: '',
+    businesses: [
+        {id: 1, name: 'Black-Owned Financial Services', category: 'Financial'},
+        {id: 2, name: 'Cultural Heritage Designs', category: 'Creative'},
+        {id: 3, name: 'Urban Wellness Center', category: 'Health'},
+        {id: 4, name: 'Tech Innovators Collective', category: 'Technology'},
+        {id: 5, name: 'Soul Food Catering', category: 'Food'}
+    ],
+    filteredBusinesses() {
+        if (!this.businessSearch) return this.businesses;
+        return this.businesses.filter(b =>
+            b.name.toLowerCase().includes(this.businessSearch.toLowerCase()) ||
+            b.category.toLowerCase().includes(this.businessSearch.toLowerCase())
+        );
+    },
+    selectBusiness(business) {
+        this.business = business;
+        this.step = 2;
+    },
+    selectService(service) {
+        this.selectedService = service;
+        this.step = 3;
+    },
+    selectDate(date) {
+        this.selectedDate = date;
+        this.step = 4;
+    },
+    selectTime(time) {
+        this.selectedTime = time;
+        this.step = 5;
+    },
+    submitBooking() {
+        // This would typically send data to backend
+        alert('Booking submitted! A confirmation will be sent to your email.');
+        // Reset form
+        this.step = 1;
+        this.business = null;
+        this.selectedService = null;
+        this.selectedDate = null;
+        this.selectedTime = null;
+        this.contactInfo = {name: '', email: '', phone: '', notes: ''};
+    },
+    prevStep() {
+        if (this.step > 1) this.step--;
+    }
+}">
+    <!-- Navigation Bar -->
+    <nav class="bg-mud-cloth-brown text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="h-10 w-10 mr-2">
+                            <!-- SVG Boston Outline -->
+                            <svg viewBox="0 0 100 100" class="boston-outline fill-current text-kente-gold">
+                                <path d="M30,10 C20,15 15,25 15,40 C15,60 25,70 25,80 C25,85 30,90 40,90 C50,90 60,85 70,80 C80,75 85,65 85,50 C85,35 80,25 70,20 C60,15 50,15 45,10 C40,5 35,8 30,10 Z" />
+                            </svg>
+                        </div>
+                        <span class="text-xl font-bold">BostonSchedule</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Home</a>
+                    <a href="booking.html" class="px-3 py-2 rounded-md text-sm font-medium bg-kente-gold bg-opacity-30">Book Appointment</a>
+                    <a href="dashboard.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Business Dashboard</a>
+                    <a href="services.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Manage Services</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex items-center md:hidden">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-opacity-80 focus:outline-none">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" class="md:hidden bg-mud-cloth-brown bg-opacity-95" style="display: none;">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-opacity-80">Home</a>
+                <a href="booking.html" class="block px-3 py-2 rounded-md text-base font-medium bg-kente-gold bg-opacity-30">Book Appointment</a>
+                <a href="dashboard.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-opacity-80">Business Dashboard</a>
+                <a href="services.html" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-opacity-80">Manage Services</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Booking Progress Bar -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-mud-cloth-brown mb-4 text-center">Book Your Appointment</h1>
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <div class="relative">
+                            <div class="h-1 bg-gray-200 rounded-full">
+                                <div class="h-1 bg-kente-gold rounded-full"
+                                    :style="`width: ${(step - 1) * 25}%`"></div>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-between">
+                                <div :class="step >= 1 ? 'bg-kente-gold text-white' : 'bg-gray-200 text-gray-600'"
+                                     class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">1</div>
+                                <div :class="step >= 2 ? 'bg-kente-gold text-white' : 'bg-gray-200 text-gray-600'"
+                                     class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">2</div>
+                                <div :class="step >= 3 ? 'bg-kente-gold text-white' : 'bg-gray-200 text-gray-600'"
+                                     class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">3</div>
+                                <div :class="step >= 4 ? 'bg-kente-gold text-white' : 'bg-gray-200 text-gray-600'"
+                                     class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">4</div>
+                                <div :class="step >= 5 ? 'bg-kente-gold text-white' : 'bg-gray-200 text-gray-600'"
+                                     class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">5</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between text-xs mt-2 text-gray-500">
+                    <div class="text-center">Select Business</div>
+                    <div class="text-center">Choose Service</div>
+                    <div class="text-center">Select Date</div>
+                    <div class="text-center">Choose Time</div>
+                    <div class="text-center">Your Details</div>
+                </div>
+            </div>
+
+            <!-- Step 1: Select Business -->
+            <div x-show="step === 1" class="bg-white p-6 rounded-lg shadow-md" style="display: none;">
+                <h2 class="text-xl font-semibold text-mud-cloth-brown mb-4">Select a Business</h2>
+
+                <div class="mb-4">
+                    <input
+                        type="text"
+                        x-model="businessSearch"
+                        placeholder="Search by business name or category..."
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown focus:border-transparent"
+                    >
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <template x-for="business in filteredBusinesses()">
+                        <div
+                            @click="selectBusiness(business)"
+                            class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition duration-200"
+                        >
+                            <h3 class="text-lg font-medium text-ankara-red" x-text="business.name"></h3>
+                            <span class="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full" x-text="business.category"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Step 2: Choose Service -->
+            <div x-show="step === 2" class="bg-white p-6 rounded-lg shadow-md" style="display: none;">
+                <div class="mb-4 flex justify-between items-center">
+                    <button @click="prevStep" class="text-mud-cloth-brown hover:underline flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        Back
+                    </button>
+                    <h2 class="text-xl font-semibold text-mud-cloth-brown">Choose a Service</h2>
+                    <div class="w-16"></div> <!-- Spacer to center the heading -->
+                </div>
+
+                <div class="mb-4 p-4 bg-gray-50 rounded-lg">
+                    <h3 class="text-lg font-medium text-ankara-red" x-text="business?.name"></h3>
+                    <p class="text-sm text-gray-500" x-text="`Category: ${business?.category}`"></p>
+                </div>
+
+                <div class="space-y-4">
+                    <template x-for="service in services">
+                        <div
+                            @click="selectService(service)"
+                            class="border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition duration-200"
+                        >
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-medium text-mud-cloth-brown" x-text="service.name"></h3>
+                                <span class="text-kente-gold font-bold" x-text="`$${service.price}`"></span>
+                            </div>
+                            <p class="text-gray-600 text-sm" x-text="service.description"></p>
+                            <p class="text-gray-500 text-sm mt-2" x-text="`Duration: ${service.duration} minutes`"></p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Step 3: Select Date -->
+            <div x-show="step === 3" class="bg-white p-6 rounded-lg shadow-md" style="display: none;">
+                <div class="mb-4 flex justify-between items-center">
+                    <button @click="prevStep" class="text-mud-cloth-brown hover:underline flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        Back
+                    </button>
+                    <h2 class="text-xl font-semibold text-mud-cloth-brown">Select a Date</h2>
+                    <div class="w-16"></div> <!-- Spacer to center the heading -->
+                </div>
+
+                <div class="mb-4 p-4 bg-gray-50 rounded-lg">
+                    <div class="flex justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium text-ankara-red" x-text="business?.name"></h3>
+                            <p class="text-sm text-gray-600" x-text="selectedService?.name"></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-kente-gold font-bold" x-text="`$${selectedService?.price}`"></p>
+                            <p class="text-sm text-gray-500" x-text="`${selectedService?.duration} min`"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simple calendar for demo purposes -->
+                <div class="mb-4">
+                    <div class="grid grid-cols-7 gap-2 mb-2 text-center">
+                        <div class="text-sm font-medium text-gray-500">Sun</div>
+                        <div class="text-sm font-medium text-gray-500">Mon</div>
+                        <div class="text-sm font-medium text-gray-500">Tue</div>
+                        <div class="text-sm font-medium text-gray-500">Wed</div>
+                        <div class="text-sm font-medium text-gray-500">Thu</div>
+                        <div class="text-sm font-medium text-gray-500">Fri</div>
+                        <div class="text-sm font-medium text-gray-500">Sat</div>
+                    </div>
+
+                    <div class="grid grid-cols-7 gap-2">
+                        <!-- Sample dates for next 2 weeks -->
+                        <template x-for="day in 28">
+                            <div
+                                @click="selectDate(`May ${day}, 2025`)"
+                                :class="{'bg-kente-gold text-white': selectedDate === `May ${day}, 2025`}"
+                                class="p-2 text-center rounded-lg cursor-pointer hover:bg-gray-100 transition duration-200"
+                            >
+                                <span x-text="day"></span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Choose Time -->
+            <div x-show="step === 4" class="bg-white p-6 rounded-lg shadow-md" style="display: none;">
+                <div class="mb-4 flex justify-between items-center">
+                    <button @click="prevStep" class="text-mud-cloth-brown hover:underline flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        Back
+                    </button>
+                    <h2 class="text-xl font-semibold text-mud-cloth-brown">Choose a Time</h2>
+                    <div class="w-16"></div> <!-- Spacer to center the heading -->
+                </div>
+
+                <div class="mb-4 p-4 bg-gray-50 rounded-lg">
+                    <div class="flex justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium text-ankara-red" x-text="business?.name"></h3>
+                            <p class="text-sm text-gray-600" x-text="selectedService?.name"></p>
+                            <p class="text-sm text-gray-600" x-text="selectedDate"></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-kente-gold font-bold" x-text="`$${selectedService?.price}`"></p>
+                            <p class="text-sm text-gray-500" x-text="`${selectedService?.duration} min`"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <template x-for="time in availableTimes">
+                        <button
+                            @click="selectTime(time)"
+                            :class="{'bg-kente-gold text-white': selectedTime === time, 'bg-gray-100 text-gray-700 hover:bg-gray-200': selectedTime !== time}"
+                            class="py-3 px-4 rounded-lg text-center transition duration-200"
+                        >
+                            <span x-text="time"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Step 5: Contact Information -->
+            <div x-show="step === 5" class="bg-white p-6 rounded-lg shadow-md" style="display: none;">
+                <div class="mb-4 flex justify-between items-center">
+                    <button @click="prevStep" class="text-mud-cloth-brown hover:underline flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        Back
+                    </button>
+                    <h2 class="text-xl font-semibold text-mud-cloth-brown">Your Details</h2>
+                    <div class="w-16"></div> <!-- Spacer to center the heading -->
+                </div>
+
+                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <div class="mb-2">
+                        <h3 class="text-lg font-medium text-ankara-red" x-text="business?.name"></h3>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <div>
+                            <p x-text="selectedService?.name"></p>
+                            <p x-text="selectedDate"></p>
+                            <p x-text="selectedTime"></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-kente-gold font-bold" x-text="`$${selectedService?.price}`"></p>
+                            <p class="text-gray-500" x-text="`${selectedService?.duration} min`"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <form @submit.prevent="submitBooking">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                            <input
+                                type="text"
+                                x-model="contactInfo.name"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown focus:border-transparent"
+                            >
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input
+                                type="email"
+                                x-model="contactInfo.email"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown focus:border-transparent"
+                            >
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                            <input
+                                type="tel"
+                                x-model="contactInfo.phone"
+                                required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown focus:border-transparent"
+                            >
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Additional Notes (Optional)</label>
+                            <textarea
+                                x-model="contactInfo.notes"
+                                rows="3"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown focus:border-transparent"
+                            ></textarea>
+                        </div>
+
+                        <div class="pt-4">
+                            <button
+                                type="submit"
+                                class="w-full py-3 bg-ankara-red hover:bg-opacity-90 text-white font-bold rounded-lg transition duration-200"
+                            >
+                                Confirm Booking
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-mud-cloth-brown text-white mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">BostonSchedule</h3>
+                    <p class="text-sm">Empowering Black-owned businesses in Boston with modern scheduling solutions.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="hover:underline">Home</a></li>
+                        <li><a href="booking.html" class="hover:underline">Book Appointment</a></li>
+                        <li><a href="dashboard.html" class="hover:underline">Business Dashboard</a></li>
+                        <li><a href="services.html" class="hover:underline">Manage Services</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact Us</h3>
+                    <address class="text-sm not-italic">
+                        <p>Boston, MA</p>
+                        <p>Email: info@bostonschedule.com</p>
+                        <p>Phone: (617) 555-1234</p>
+                    </address>
+                </div>
+            </div>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-sm text-center">
+                <p>&copy; 2025 BostonSchedule. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
