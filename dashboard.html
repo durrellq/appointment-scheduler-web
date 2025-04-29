@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+        .text-kente-gold { color: #DAA520; }
+        .text-ankara-red { color: #8B0000; }
+        .text-mud-cloth-brown { color: #8B4513; }
+        .bg-kente-gold { background-color: #DAA520; }
+        .bg-ankara-red { background-color: #8B0000; }
+        .bg-mud-cloth-brown { background-color: #8B4513; }
+        .border-kente-gold { border-color: #DAA520; }
+        .border-ankara-red { border-color: #8B0000; }
+        .border-mud-cloth-brown { border-color: #8B4513; }
+        .hover-bg-kente-gold:hover { background-color: #C19A2E; }
+        .hover-bg-ankara-red:hover { background-color: #9B3333; }
+        .hover-bg-mud-cloth-brown:hover { background-color: #9B5E34; }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Dashboard - BostonSchedule</title>
@@ -11,7 +25,7 @@
     <!-- Chart.js for Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-50 text-gray-900 font-sans">
     <div x-data="{
         sidebarOpen: false,
         currentTab: 'dashboard',
@@ -154,7 +168,7 @@
     x-init="initCharts()"
     class="min-h-screen">
         <!-- Header -->
-        <header class="bg-white shadow fixed w-full z-10">
+        <header class="bg-mud-cloth-brown text-white shadow-lg">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
                 <div class="flex items-center">
                     <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 focus:outline-none lg:hidden">
@@ -193,7 +207,7 @@
                 </div>
             </div>
 
-            <nav class="mt-6 px-4">
+            <nav class="bg-mud-cloth-brown text-white shadow-lg">
                 <a
                     @click="currentTab = 'dashboard'"
                     :class="{'bg-primary-900': currentTab === 'dashboard'}"
@@ -1191,5 +1205,10 @@
             // Additional initialization if needed
         });
     </script>
+    <footer class="bg-gray-900 text-white pt-12 pb-8">
+        <div class="container mx-auto px-4">
+            <p class="text-center"></body>copy; 2023 Boston Black Entrepreneurs Appointment Scheduler. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
