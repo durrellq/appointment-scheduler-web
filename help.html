@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - Boston Black Entrepreneurs Appointment Scheduler</title>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom Styles -->
+    <style>
+        /* African-inspired pattern backgrounds */
+        .bg-pattern-1 {
+            background-color: #8B4513;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .bg-pattern-2 {
+            background-color: #DAA520;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        /* Rich colors inspired by African textiles */
+        .text-kente-gold { color: #DAA520; }
+        .text-ankara-red { color: #8B0000; }
+        .text-mud-cloth-brown { color: #8B4513; }
+        .bg-kente-gold { background-color: #DAA520; }
+        .bg-ankara-red { background-color: #8B0000; }
+        .bg-mud-cloth-brown { background-color: #8B4513; }
+        .border-kente-gold { border-color: #DAA520; }
+        .border-ankara-red { border-color: #8B0000; }
+        .border-mud-cloth-brown { border-color: #8B4513; }
+        .hover-bg-kente-gold:hover { background-color: #C19A2E; }
+        .hover-bg-ankara-red:hover { background-color: #9B3333; }
+        .hover-bg-mud-cloth-brown:hover { background-color: #9B5E34; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <!-- Navigation Bar -->
+    <nav class="bg-mud-cloth-brown text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-xl font-bold">Boston Black Entrepreneurs</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Home</a>
+                    <a href="index.html#features" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Features</a>
+                    <a href="index.html#businesses" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Businesses</a>
+                    <a href="index.html#booking" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Book Now</a>
+                    <a href="index.html#testimonials" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Testimonials</a>
+                    <a href="dashboard.html" class="bg-kente-gold hover:bg-opacity-90 text-white px-4 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                    <a href="login.html" class="bg-ankara-red hover:bg-opacity-90 text-white px-4 py-2 rounded-md text-sm font-medium">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Help Center Hero Section -->
+    <section class="relative bg-pattern-1 text-white py-16">
+        <div class="absolute inset-0 bg-black opacity-30"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center">
+                <h1 class="text-4xl font-extrabold tracking-tight mb-4">Help Center</h1>
+                <p class="text-xl mb-8 max-w-3xl mx-auto">
+                    Find answers to common questions and learn how to get the most out of our appointment scheduling platform.
+                </p>
+                <div class="max-w-3xl mx-auto">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            placeholder="Search for help topics..." 
+                            class="w-full px-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-ankara-red"
+                        >
+                        <button class="absolute right-3 top-3 text-ankara-red">
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Help Center Main Content -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+                <!-- Sidebar -->
+                <div class="lg:col-span-3">
+                    <nav class="space-y-1 sticky top-6">
+                        <h3 class="text-lg font-bold text-mud-cloth-brown mb-4">Help Topics</h3>
+                        <a href="#" class="block px-4 py-2 rounded-md font-medium bg-mud-cloth-brown text-white">
+                            <i class="fas fa-play-circle mr-2"></i> Getting Started
+                        </a>
+                        <a href="#" class="block px-4 py-2 rounded-md font-medium hover:bg-gray-100">
+                            <i class="fas fa-user-circle mr-2"></i> Account Management
+                        </a>
+                        <a href="#" class="block px-4 py-2 rounded-md font-medium hover:bg-gray-100">
+                            <i class="fas fa-store mr-2"></i> Business Profile
+                        </a>
+                        <a href="#" class="block px-4 py-2 rounded-md font-medium hover:bg-gray-100">
+                            <i class="fas fa-calendar-alt mr-2"></i> Scheduling
+                        </a>
+                        <a href="#" class="block px-4 py-2 rounded-md font-medium hover:bg-gray-100">
+                            <i class="fas fa-credit-card mr-2"></i> Payments
+                        </a>
+                        <a href="#" class="block px-4 py-2 rounded-md font-medium hover:bg-gray-100">
+                            <i class="fas fa-bell mr-2"></i> Notifications
+                        </a>
+                        <a href="#" class="block px-4 py-2 rounded-md font-medium hover:bg-gray-100">
+                            <i class="fas fa-wrench mr-2"></i> Troubleshooting
+                        </a>
+                    </nav>
+                </div>
+                
+                <!-- Main Content -->
+                <div class="mt-12 lg:mt-0 lg:col-span-9">
+                    <!-- Getting Started Tab -->
+                    <div>
+                        <h2 class="text-3xl font-bold text-mud-cloth-brown mb-6">Getting Started</h2>
+                        
+                        <div class="space-y-8">
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-semibold text-gray-800 mb-4">What is Boston Black Entrepreneurs Appointment Scheduler?</h3>
+                                    <p class="text-gray-600 mb-4">
+                                        Our appointment scheduling platform helps Black entrepreneurs in Boston streamline bookings and grow their business. 
+                                        It provides an easy way for clients to book appointments online and helps business owners manage their schedule efficiently.
+                                    </p>
+                                    <p class="text-gray-600">
+                                        With features like automated reminders, payment processing, and business analytics, our platform is designed to save you time 
+                                        and reduce no-shows, allowing you to focus on what matters most - running your business.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                                <div class="p-6">
+                                    <h3 class="text-xl font-semibold text-gray-800 mb-4">How to Create an Account</h3>
+                                    <ol class="list-decimal pl-5 space-y-3 text-gray-600">
+                                        <li>Visit our <a href="register.html" class="text-ankara-red hover:underline">registration page</a>.</li>
+                                        <li>Enter your email address and create a password.</li>
+                                        <li>Select your account type (Business Owner or Client).</li>
+                                        <li>Fill in your personal information.</li>
+                                        <li>Verify your email address by clicking the link sent to your inbox.</li>
+                                        <li>Log in to your new account and start setting up your profile!</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Support Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-mud-cloth-brown">Need More Help?</h2>
+                <p class="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">
+                    Our support team is here to help you with any questions or issues you may have.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                    <div class="text-ankara-red mb-4">
+                        <i class="fas fa-envelope text-5xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Email Support</h3>
+                    <p class="text-gray-600 mb-4">
+                        Send us an email and we'll get back to you within 24 hours.
+                    </p>
+                    <a href="mailto:support@bostonblackentrepreneurs.com" class="text-ankara-red hover:underline font-medium">
+                        support@bostonblackentrepreneurs.com
+                    </a>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                    <div class="text-ankara-red mb-4">
+                        <i class="fas fa-phone-alt text-5xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Phone Support</h3>
+                    <p class="text-gray-600 mb-4">
+                        Call us Monday through Friday, 9am to 5pm EST.
+                    </p>
+                    <a href="tel:6175551234" class="text-ankara-red hover:underline font-medium">
+                        (617) 555-1234
+                    </a>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md p-6 text-center">
+                    <div class="text-ankara-red mb-4">
+                        <i class="fas fa-comments text-5xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Live Chat</h3>
+                    <p class="text-gray-600 mb-4">
+                        Chat with our support team in real-time for immediate assistance.
+                    </p>
+                    <button class="bg-ankara-red hover:bg-opacity-90 text-white px-4 py-2 rounded-lg font-medium">
+                        Start Chat
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Boston Black Entrepreneurs</h3>
+                    <p class="text-gray-400 mb-4">Empowering Black-owned businesses with modern scheduling solutions.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="businesses.html" class="text-gray-400 hover:text-white">Find Businesses</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-white">Login</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-white">Register</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="help.html" class="text-gray-400 hover:text-white">Help Center</a></li>
+                        <li><a href="blog.html" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="tutorials.html" class="text-gray-400 hover:text-white">Tutorials</a></li>
+                        <li><a href="community.html" class="text-gray-400 hover:text-white">Community</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <p class="text-gray-400">support@bostonblackentrepreneurs.com</p>
+                    <p class="text-gray-400">(617) 555-1234</p>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
+                <p>&copy; 2025 Boston Black Entrepreneurs. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

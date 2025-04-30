@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorials & Resources - Boston Black Entrepreneurs</title>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom Styles -->
+    <style>
+        /* African-inspired pattern backgrounds */
+        .bg-pattern-1 {
+            background-color: #8B4513;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .bg-pattern-2 {
+            background-color: #DAA520;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        /* Rich colors inspired by African textiles */
+        .text-kente-gold { color: #DAA520; }
+        .text-ankara-red { color: #8B0000; }
+        .text-mud-cloth-brown { color: #8B4513; }
+        .bg-kente-gold { background-color: #DAA520; }
+        .bg-ankara-red { background-color: #8B0000; }
+        .bg-mud-cloth-brown { background-color: #8B4513; }
+        .border-kente-gold { border-color: #DAA520; }
+        .border-ankara-red { border-color: #8B0000; }
+        .border-mud-cloth-brown { border-color: #8B4513; }
+        .hover-bg-kente-gold:hover { background-color: #C19A2E; }
+        .hover-bg-ankara-red:hover { background-color: #9B3333; }
+        .hover-bg-mud-cloth-brown:hover { background-color: #9B5E34; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans">
+    <!-- Navigation Bar -->
+    <nav class="bg-mud-cloth-brown text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-xl font-bold">Boston Black Entrepreneurs</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Home</a>
+                    <a href="index.html#features" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Features</a>
+                    <a href="index.html#businesses" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Businesses</a>
+                    <a href="index.html#booking" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Book Now</a>
+                    <a href="tutorials.html" class="bg-kente-gold px-3 py-2 rounded-md text-sm font-medium">Tutorials</a>
+                    <a href="dashboard.html" class="hover:bg-opacity-90 text-white px-4 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                    <a href="login.html" class="bg-ankara-red hover:bg-opacity-90 text-white px-4 py-2 rounded-md text-sm font-medium">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative bg-pattern-1 text-white py-16">
+        <div class="absolute inset-0 bg-black opacity-30"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center">
+                <h1 class="text-4xl font-extrabold tracking-tight mb-4 leading-tight">
+                    Business Growth Resources & Tutorials
+                </h1>
+                <p class="text-xl mb-8 max-w-2xl mx-auto">
+                    Practical guides, video tutorials, and resources to help Black and Brown entrepreneurs build and grow successful businesses.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutorial Categories -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-mud-cloth-brown mb-8 text-center">Tutorial Categories</h2>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
+                <!-- Category 1 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-kente-gold">
+                    <div class="bg-kente-gold text-white p-4">
+                        <h3 class="text-xl font-semibold">Business Basics</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-play-circle text-ankara-red mr-2 mt-1"></i>
+                                <span>How to Register Your Business</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-play-circle text-ankara-red mr-2 mt-1"></i>
+                                <span>Creating a Business Plan That Works</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-play-circle text-ankara-red mr-2 mt-1"></i>
+                                <span>Legal Requirements for Small Businesses</span>
+                            </li>
+                        </ul>
+                        <div class="mt-4">
+                            <a href="#" class="text-ankara-red hover:text-mud-cloth-brown font-medium">View all Business Basics tutorials →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 2 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-kente-gold">
+                    <div class="bg-kente-gold text-white p-4">
+                        <h3 class="text-xl font-semibold">Marketing & Branding</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-play-circle text-ankara-red mr-2 mt-1"></i>
+                                <span>Social Media Marketing for Small Businesses</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-play-circle text-ankara-red mr-2 mt-1"></i>
+                                <span>Building a Strong Brand Identity</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-play-circle text-ankara-red mr-2 mt-1"></i>
+                                <span>Low-Cost Marketing Strategies</span>
+                            </li>
+                        </ul>
+                        <div class="mt-4">
+                            <a href="#" class="text-ankara-red hover:text-mud-cloth-brown font-medium">View all Marketing tutorials →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category 3 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border border-kente-gold">
+                    <div class="bg-kente-gold text-white p-4">
+                        <h3 class="text-xl font-semibold">Financial Management</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fas fa-play-circle text-ankara-red mr-2 mt-1"></i>
+                                <span>Small Business Bookkeeping Basics</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-play-circle text-ankara-red mr-2 mt-1"></i>
+                                <span>Securing Funding for Your Business</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-play-circle text-ankara-red mr-2 mt-1"></i>
+                                <span>Managing Cash Flow Effectively</span>
+                            </li>
+                        </ul>
+                        <div class="mt-4">
+                            <a href="#" class="text-ankara-red hover:text-mud-cloth-brown font-medium">View all Financial tutorials →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Tutorials -->
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-mud-cloth-brown mb-8 text-center">Featured Tutorials</h2>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <!-- Video Tutorial 1 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <iframe class="w-full h-64" src="https://www.youtube.com/embed/71FmkfENYDI?si=4a_mBiFL1VRW9Ci0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Launching and supporting Black-owned businesses</h3>
+                        <p class="text-gray-600 mb-4">Learn strategies and insights for launching, growing, and supporting Black-owned businesses in your community.</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span class="mr-3"><i class="fas fa-clock mr-1"></i> 18 minutes</span>
+                            <span><i class="fas fa-user mr-1"></i> By Mandy Bowman</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Tutorial 2 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="aspect-w-16 aspect-h-9">
+                        <iframe class="w-full h-64" src="https://www.youtube.com/embed/ej4Y2TdRqfI?si=FeTw6VdfYSA_F6Co" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">How To Write A Business Plan That Works</h3>
+                        <p class="text-gray-600 mb-4">A comprehensive guide to developing a business plan that will help you secure funding and guide your business growth.</p>
+                        <div class="flex items-center text-sm text-gray-500">
+                            <span class="mr-3"><i class="fas fa-clock mr-1"></i> 22 minutes</span>
+                            <span><i class="fas fa-user mr-1"></i> By Noelle Randall</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Resources -->
+    <section class="py-12 bg-pattern-2">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-mud-cloth-brown mb-8 text-center">Business Resources</h2>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <a href="https://www.sba.gov/" target="_blank" class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                    <h4 class="text-lg font-semibold text-ankara-red mb-2">Small Business Administration</h4>
+                    <p class="text-gray-600">Government resources, loans, and guidance for small business owners.</p>
+                </a>
+                <a href="https://www.score.org/" target="_blank" class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                    <h4 class="text-lg font-semibold text-ankara-red mb-2">SCORE</h4>
+                    <p class="text-gray-600">Free business mentoring and education from experienced volunteers.</p>
+                </a>
+                <a href="https://blackeconomiccouncil.org/" target="_blank" class="bg-white rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow">
+                    <h4 class="text-lg font-semibold text-ankara-red mb-2">National Black Economic Council</h4>
+                    <p class="text-gray-600">Resources specifically for Black entrepreneurs and business owners.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Productivity Tips -->
+    <section class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-mud-cloth-brown mb-8 text-center">Productivity Tips</h2>
+
+            <div class="bg-gray-50 rounded-xl p-8">
+                <h3 class="text-2xl font-bold text-mud-cloth-brown mb-6">Daily Habits for Business Success</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Set Clear Daily Goals</h4>
+                                    <p class="text-gray-600">Start each day by writing down your top 3 priorities to stay focused.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Time Blocking</h4>
+                                    <p class="text-gray-600">Dedicate specific blocks of time to different tasks to improve focus and efficiency.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Delegate Effectively</h4>
+                                    <p class="text-gray-600">Identify tasks that can be delegated to free up your time for high-value activities.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Limit Distractions</h4>
+                                    <p class="text-gray-600">Turn off notifications during focused work periods to maintain productivity.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Regular Breaks</h4>
+                                    <p class="text-gray-600">Use the Pomodoro Technique: 25 minutes of work followed by a 5-minute break.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Review and Reflect</h4>
+                                    <p class="text-gray-600">End each day by reviewing accomplishments and planning for tomorrow.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Boston Black Entrepreneurs</h3>
+                    <p class="text-gray-400 mb-4">Empowering Black-owned businesses with modern scheduling solutions.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="businesses.html" class="text-gray-400 hover:text-white">Find Businesses</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-white">Login</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-white">Register</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="help.html" class="text-gray-400 hover:text-white">Help Center</a></li>
+                        <li><a href="blog.html" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="tutorials.html" class="text-gray-400 hover:text-white">Tutorials</a></li>
+                        <li><a href="community.html" class="text-gray-400 hover:text-white">Community</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>support@bostonblackentrepreneurs.com</li>
+                        <li>(617) 555-1234</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
+                <p>&copy; 2025 Boston Black Entrepreneurs. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

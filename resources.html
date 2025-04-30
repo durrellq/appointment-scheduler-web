@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Resources - Boston Black Entrepreneurs</title>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom Styles -->
+    <style>
+        /* African-inspired pattern backgrounds */
+        .bg-pattern-1 {
+            background-color: #8B4513;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .bg-pattern-2 {
+            background-color: #DAA520;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        /* Rich colors inspired by African textiles */
+        .text-kente-gold { color: #DAA520; }
+        .text-ankara-red { color: #8B0000; }
+        .text-mud-cloth-brown { color: #8B4513; }
+        .bg-kente-gold { background-color: #DAA520; }
+        .bg-ankara-red { background-color: #8B0000; }
+        .bg-mud-cloth-brown { background-color: #8B4513; }
+        .border-kente-gold { border-color: #DAA520; }
+        .border-ankara-red { border-color: #8B0000; }
+        .border-mud-cloth-brown { border-color: #8B4513; }
+        .hover-bg-kente-gold:hover { background-color: #C19A2E; }
+        .hover-bg-ankara-red:hover { background-color: #9B3333; }
+        .hover-bg-mud-cloth-brown:hover { background-color: #9B5E34; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans" x-data="{
+    mobileMenuOpen: false,
+    activeSection: 'resources'
+}">
+    <!-- Navigation Bar -->
+    <nav class="bg-mud-cloth-brown text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-xl font-bold">Boston Black Entrepreneurs</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Home</a>
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Features</a>
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Businesses</a>
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Book Now</a>
+                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-opacity-80">Testimonials</a>
+                    <a href="dashboard.html" class="bg-kente-gold hover:bg-opacity-90 text-white px-4 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                    <a href="login.html" class="bg-ankara-red hover:bg-opacity-90 text-white px-4 py-2 rounded-md text-sm font-medium">Login</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white hover:text-kente-gold focus:outline-none">
+                        <i class="fas fa-bars h-6 w-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" class="md:hidden bg-mud-cloth-brown pb-3 pt-2">
+            <div class="px-2 space-y-1">
+                <a href="index.html" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-kente-gold hover:text-white">Home</a>
+                <a href="#" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-kente-gold hover:text-white">Features</a>
+                <a href="#" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-kente-gold hover:text-white">Businesses</a>
+                <a href="#" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-kente-gold hover:text-white">Book Now</a>
+                <a href="#" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-kente-gold hover:text-white">Testimonials</a>
+                <a href="dashboard.html" class="block px-3 py-2 rounded-md text-base font-medium bg-kente-gold text-white mt-1">Dashboard</a>
+                <a href="login.html" class="block px-3 py-2 rounded-md text-base font-medium bg-ankara-red text-white mt-1">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative bg-pattern-1 text-white py-16">
+        <div class="absolute inset-0 bg-black opacity-30"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center">
+                <h1 class="text-4xl font-extrabold tracking-tight mb-4 leading-tight">
+                    Business Resources for Black Entrepreneurs
+                </h1>
+                <p class="text-xl mb-8 max-w-3xl mx-auto">
+                    Access tools, guides, and support to help your Black-owned business thrive in Boston and beyond.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resource Categories Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-mud-cloth-brown">Resource Categories</h2>
+                <p class="text-xl text-gray-600 mt-4 max-w-3xl mx-auto">
+                    Explore our comprehensive collection of resources designed specifically for Black entrepreneurs.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Category 1 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="text-ankara-red mb-4">
+                            <i class="fas fa-book-open text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Business Education</h3>
+                        <p class="text-gray-600 mb-4">
+                            Access guides, courses, and workshops on business fundamentals, marketing, finance, and more.
+                        </p>
+                        <a href="#education" class="text-ankara-red hover:text-opacity-80 font-medium">Explore Resources →</a>
+                    </div>
+                </div>
+
+                <!-- Category 2 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="text-ankara-red mb-4">
+                            <i class="fas fa-hand-holding-usd text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Funding Opportunities</h3>
+                        <p class="text-gray-600 mb-4">
+                            Discover grants, loans, and investment opportunities specifically for Black-owned businesses.
+                        </p>
+                        <a href="#funding" class="text-ankara-red hover:text-opacity-80 font-medium">Explore Resources →</a>
+                    </div>
+                </div>
+
+                <!-- Category 3 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="text-ankara-red mb-4">
+                            <i class="fas fa-users text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Mentorship & Networking</h3>
+                        <p class="text-gray-600 mb-4">
+                            Connect with experienced mentors and join networking events to grow your business connections.
+                        </p>
+                        <a href="#mentorship" class="text-ankara-red hover:text-opacity-80 font-medium">Explore Resources →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Resources Section -->
+    <section id="featured" class="py-16 bg-pattern-2">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-mud-cloth-brown">Featured Resources</h2>
+                <p class="text-xl text-gray-700 mt-4 max-w-3xl mx-auto">
+                    Explore our most popular and valuable resources for Black entrepreneurs.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Resource 1 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="md:flex">
+                        <div class="md:flex-shrink-0">
+                            <img class="h-48 w-full object-cover md:w-48" src="https://placehold.co/300x300?text=Resource" alt="Resource">
+                        </div>
+                        <div class="p-6">
+                            <div class="uppercase tracking-wide text-sm text-ankara-red font-semibold">Business Planning</div>
+                            <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">Business Plan Template for Black Entrepreneurs</a>
+                            <p class="mt-2 text-gray-600">A comprehensive business plan template specifically designed for Black-owned businesses, with guidance on addressing unique challenges and opportunities.</p>
+                            <div class="mt-4">
+                                <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-ankara-red hover:bg-opacity-90">
+                                    Download Template
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resource 2 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="md:flex">
+                        <div class="md:flex-shrink-0">
+                            <img class="h-48 w-full object-cover md:w-48" src="https://placehold.co/300x300?text=Resource" alt="Resource">
+                        </div>
+                        <div class="p-6">
+                            <div class="uppercase tracking-wide text-sm text-ankara-red font-semibold">Funding</div>
+                            <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">Guide to Grants for Black-Owned Businesses</a>
+                            <p class="mt-2 text-gray-600">A comprehensive guide to finding and applying for grants specifically available to Black entrepreneurs in Boston and nationwide.</p>
+                            <div class="mt-4">
+                                <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-ankara-red hover:bg-opacity-90">
+                                    Access Guide
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <a href="#all-resources" class="bg-mud-cloth-brown hover:bg-opacity-90 text-white px-6 py-3 rounded-lg font-medium inline-block">
+                    View All Resources
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Boston Black Entrepreneurs</h3>
+                    <p class="text-gray-400 mb-4">Empowering Black-owned businesses with modern scheduling solutions.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="businesses.html" class="text-gray-400 hover:text-white">Find Businesses</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-white">Login</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-white">Register</a></li>
+                        <li><a href="pricing.html" class="text-gray-400 hover:text-white">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="help.html" class="text-gray-400 hover:text-white">Help Center</a></li>
+                        <li><a href="blog.html" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="tutorials.html" class="text-gray-400 hover:text-white">Tutorials</a></li>
+                        <li><a href="community.html" class="text-gray-400 hover:text-white">Community</a></li>
+                        <li><a href="resources.html" class="text-gray-400 hover:text-white">Business Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt h-6 w-6 mr-2 text-gray-500"></i>
+                            <span>123 Dudley Street<br>Roxbury, MA 02119</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope h-6 w-6 mr-2 text-gray-500"></i>
+                            <span>support@bostonblackentrepreneurs.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone h-6 w-6 mr-2 text-gray-500"></i>
+                            <span>(617) 555-1234</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
+                <p>&copy; 2025 Boston Black Entrepreneurs. All rights reserved.</p>
+                <div class="mt-2 space-x-4">
+                    <a href="terms.html" class="hover:text-white">Terms of Service</a>
+                    <a href="privacy.html" class="hover:text-white">Privacy Policy</a>
+                    <a href="accessibility.html" class="hover:text-white">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
