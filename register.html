@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Service Registration</title>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom Styles -->
+    <style>
+        /* African-inspired pattern backgrounds */
+        .bg-pattern-1 {
+            background-color: #8B4513;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .bg-pattern-2 {
+            background-color: #DAA520;
+            background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        /* Rich colors inspired by African textiles */
+        .text-kente-gold { color: #DAA520; }
+        .text-ankara-red { color: #8B0000; }
+        .text-mud-cloth-brown { color: #8B4513; }
+        .bg-kente-gold { background-color: #DAA520; }
+        .bg-ankara-red { background-color: #8B0000; }
+        .bg-mud-cloth-brown { background-color: #8B4513; }
+        .border-kente-gold { border-color: #DAA520; }
+        .border-ankara-red { border-color: #8B0000; }
+        .border-mud-cloth-brown { border-color: #8B4513; }
+        .hover-bg-kente-gold:hover { background-color: #C19A2E; }
+        .hover-bg-ankara-red:hover { background-color: #9B3333; }
+        .hover-bg-mud-cloth-brown:hover { background-color: #9B5E34; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans" x-data="{
+    formData: {
+        companyName: '',
+        contactName: '',
+        email: '',
+        phone: '',
+        website: '',
+        businessType: '',
+        services: '',
+        description: '',
+        sendCopy: true
+    },
+    formSubmitted: false,
+    serviceCategories: [
+        'Consulting',
+        'Legal Services',
+        'Financial Services',
+        'Marketing',
+        'Technology',
+        'Healthcare',
+        'Education',
+        'Food & Beverage',
+        'Retail',
+        'Beauty & Wellness',
+        'Real Estate',
+        'Other'
+    ],
+    submitForm() {
+        // In a real application, you would send this data to your server
+        console.log('Form submitted:', this.formData);
+        
+        // Simulate sending email with form copy if requested
+        if (this.formData.sendCopy) {
+            console.log('Sending copy to:', this.formData.email);
+        }
+        
+        // Show success message
+        this.formSubmitted = true;
+        
+        // In a real app, you would reset the form after successful API submission
+        // setTimeout(() => {
+        //     this.resetForm();
+        // }, 5000);
+    },
+    resetForm() {
+        this.formData = {
+            companyName: '',
+            contactName: '',
+            email: '',
+            phone: '',
+            website: '',
+            businessType: '',
+            services: '',
+            description: '',
+            sendCopy: true
+        };
+        this.formSubmitted = false;
+    }
+}">
+    <!-- Header with business professionals image -->
+    <header class="w-full">
+        <div class="relative">
+            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
+                 alt="Black business professionals" 
+                 class="w-full h-64 md:h-80 object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white text-center">
+                <h1 class="text-3xl md:text-4xl font-bold mb-2">Business Service Registration</h1>
+                <p class="text-xl">Join our directory of professional services</p>
+            </div>
+        </div>
+        <div class="bg-pattern-1 h-6"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto py-8 px-4">
+        <!-- Success Message (shown after form submission) -->
+        <div x-show="formSubmitted" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-90"
+             x-transition:enter-end="opacity-100 transform scale-100"
+             class="bg-green-100 border-l-4 border-green-500 text-green-700 p-6 mb-6 rounded shadow">
+            <div class="flex items-center">
+                <div class="mr-4">
+                    <svg class="h-10 w-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">Registration Successful!</h3>
+                    <p class="mt-2">Thank you for registering your business. We'll review your information and get back to you soon.</p>
+                    <template x-if="formData.sendCopy">
+                        <p class="mt-1">A copy of your registration has been sent to <span class="font-semibold" x-text="formData.email"></span></p>
+                    </template>
+                    <button @click="resetForm()" class="mt-4 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                        Register Another Business
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <div x-show="!formSubmitted" class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <div class="bg-pattern-2 p-6 text-center">
+                <h2 class="text-2xl font-bold text-mud-cloth-brown">Business Registration Form</h2>
+                <p class="text-gray-700 mt-2">Complete the form below to showcase your services on our platform</p>
+            </div>
+            
+            <form @submit.prevent="submitForm()" class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Company Information -->
+                    <div class="col-span-2">
+                        <h3 class="text-lg font-semibold text-mud-cloth-brown border-b border-gray-200 pb-2 mb-4">Company Information</h3>
+                    </div>
+                    
+                    <div>
+                        <label for="companyName" class="block text-sm font-medium text-gray-700 mb-1">Company Name <span class="text-ankara-red">*</span></label>
+                        <input type="text" id="companyName" x-model="formData.companyName" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-kente-gold focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label for="businessType" class="block text-sm font-medium text-gray-700 mb-1">Business Type <span class="text-ankara-red">*</span></label>
+                        <select id="businessType" x-model="formData.businessType" required
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-kente-gold focus:border-transparent">
+                            <option value="" disabled selected>Select business type</option>
+                            <template x-for="category in serviceCategories" :key="category">
+                                <option :value="category" x-text="category"></option>
+                            </template>
+                        </select>
+                    </div>
+                    
+                    <div class="col-span-2">
+                        <label for="services" class="block text-sm font-medium text-gray-700 mb-1">Services Provided <span class="text-ankara-red">*</span></label>
+                        <input type="text" id="services" x-model="formData.services" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-kente-gold focus:border-transparent"
+                               placeholder="e.g., Financial Consulting, Tax Preparation, Wealth Management">
+                    </div>
+                    
+                    <div class="col-span-2">
+                        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Business Description <span class="text-ankara-red">*</span></label>
+                        <textarea id="description" x-model="formData.description" rows="4" required
+                                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-kente-gold focus:border-transparent"
+                                  placeholder="Describe your business and the services you offer..."></textarea>
+                    </div>
+                    
+                    <div class="col-span-2">
+                        <label for="website" class="block text-sm font-medium text-gray-700 mb-1">Website</label>
+                        <input type="url" id="website" x-model="formData.website"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-kente-gold focus:border-transparent"
+                               placeholder="https://www.yourcompany.com">
+                    </div>
+                    
+                    <!-- Contact Information -->
+                    <div class="col-span-2">
+                        <h3 class="text-lg font-semibold text-mud-cloth-brown border-b border-gray-200 pb-2 mb-4 mt-4">Contact Information</h3>
+                    </div>
+                    
+                    <div>
+                        <label for="contactName" class="block text-sm font-medium text-gray-700 mb-1">Contact Person <span class="text-ankara-red">*</span></label>
+                        <input type="text" id="contactName" x-model="formData.contactName" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-kente-gold focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address <span class="text-ankara-red">*</span></label>
+                        <input type="email" id="email" x-model="formData.email" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-kente-gold focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number <span class="text-ankara-red">*</span></label>
+                        <input type="tel" id="phone" x-model="formData.phone" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-kente-gold focus:border-transparent">
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input type="checkbox" id="sendCopy" x-model="formData.sendCopy"
+                               class="h-4 w-4 text-kente-gold focus:ring-kente-gold border-gray-300 rounded">
+                        <label for="sendCopy" class="ml-2 block text-sm text-gray-700">
+                            Send me a copy of this registration
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="mt-8 border-t border-gray-200 pt-6">
+                    <div class="flex justify-end">
+                        <button type="button" @click="resetForm()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-6 rounded-md mr-4">
+                            Reset
+                        </button>
+                        <button type="submit" class="bg-kente-gold hover:bg-opacity-90 text-white py-2 px-6 rounded-md">
+                            Submit Registration
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-12">
+        <div class="bg-pattern-1 py-8 text-white text-center">
+            <p>&copy; 2025 Boston Black Entrepreneurs. All rights reserved.</p>
+            <div class="mt-4 flex justify-center space-x-4">
+                <a href="#" class="text-white hover:text-kente-gold">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="text-white hover:text-kente-gold">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="text-white hover:text-kente-gold">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="text-white hover:text-kente-gold">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // In a real application, you would handle the form submission using AJAX
+        // This would typically include:
+        // 1. Form validation
+        // 2. API call to your backend
+        // 3. Email sending functionality
+        
+        // Example of email functionality (server-side pseudo-code):
+        /*
+        function sendConfirmationEmail(formData) {
+            const emailContent = `
+                <h2>Your Business Registration</h2>
+                <p>Thank you for registering with Boston Black Entrepreneurs!</p>
+                <h3>Registration Details:</h3>
+                <ul>
+                    <li><strong>Company:</strong> ${formData.companyName}</li>
+                    <li><strong>Business Type:</strong> ${formData.businessType}</li>
+                    <li><strong>Services:</strong> ${formData.services}</li>
+                    <li><strong>Contact:</strong> ${formData.contactName}</li>
+                    <li><strong>Email:</strong> ${formData.email}</li>
+                    <li><strong>Phone:</strong> ${formData.phone}</li>
+                </ul>
+                <p>We'll review your information and get back to you soon.</p>
+            `;
+            
+            sendEmail({
+                to: formData.email,
+                subject: "Your Business Registration Confirmation",
+                html: emailContent
+            });
+        }
+        */
+    </script>
+</body>
+</html>
