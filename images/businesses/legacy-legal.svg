@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <rect width="600" height="400" fill="#f0f0e8" />
+  <text x="300" y="100" font-family="Arial" font-size="40" text-anchor="middle" fill="#2F4F4F">Legacy Legal</text>
+  <text x="300" y="150" font-family="Arial" font-size="30" text-anchor="middle" fill="#2F4F4F">Services</text>
+  
+  <!-- Scales of Justice -->
+  <line x1="300" y1="180" x2="300" y2="300" stroke="#2F4F4F" stroke-width="8" />
+  <line x1="230" y1="200" x2="370" y2="200" stroke="#2F4F4F" stroke-width="8" />
+  
+  <!-- Left Scale -->
+  <circle cx="230" cy="200" r="10" fill="#2F4F4F" />
+  <path d="M230,200 L230,240 L200,270 L260,270 Z" fill="none" stroke="#2F4F4F" stroke-width="3" />
+  
+  <!-- Right Scale -->
+  <circle cx="370" cy="200" r="10" fill="#2F4F4F" />
+  <path d="M370,200 L370,240 L340,270 L400,270 Z" fill="none" stroke="#2F4F4F" stroke-width="3" />
+  
+  <!-- Base -->
+  <path d="M250,300 L350,300 L330,330 L270,330 Z" fill="#2F4F4F" />
+</svg>

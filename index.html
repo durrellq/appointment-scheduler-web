@@ -102,68 +102,81 @@
         </div>
     </div>
 
-    <!-- Newsletter Signup Form Popup -->
-    <div
-        x-show="showNewsletterSignup"
-        class="fixed inset-0 flex items-center justify-center z-50"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 transform scale-90"
-        x-transition:enter-end="opacity-100 transform scale-100"
-        x-transition:leave="transition ease-in duration-300"
-        x-transition:leave-start="opacity-100 transform scale-100"
-        x-transition:leave-end="opacity-0 transform scale-90"
-        style="display: none;">
+<!-- Newsletter Signup Form Popup -->
+<div
+    x-show="showNewsletterSignup"
+    class="fixed inset-0 flex items-center justify-center z-50"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 transform scale-90"
+    x-transition:enter-end="opacity-100 transform scale-100"
+    x-transition:leave="transition ease-in duration-300"
+    x-transition:leave-start="opacity-100 transform scale-100"
+    x-transition:leave-end="opacity-0 transform scale-90"
+    style="display: none;">
 
-        <div class="absolute inset-0 bg-black opacity-50" @click="showNewsletterSignup = false"></div>
+    <div class="absolute inset-0 bg-black opacity-50" @click="showNewsletterSignup = false"></div>
 
-        <div class="bg-white p-8 max-w-md mx-auto rounded-lg shadow-xl relative z-10">
-            <div class="absolute top-0 right-0 pt-4 pr-4">
-                <button @click="showNewsletterSignup = false" class="text-gray-400 hover:text-gray-500 focus:outline-none">
-                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+    <div class="bg-white p-8 max-w-md mx-auto rounded-lg shadow-xl relative z-10 border-4 border-kente-gold">
+        <div class="absolute top-0 right-0 pt-4 pr-4">
+            <button @click="showNewsletterSignup = false" class="text-gray-400 hover:text-gray-500 focus:outline-none">
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="text-center" x-show="!formSubmitted">
+            <div class="bg-kente-gold text-white text-xl font-bold py-2 px-4 rounded-t-lg -mt-8 mb-4 mx-auto inline-block">
+                JOIN OUR COMMUNITY
             </div>
+            <h3 class="text-2xl font-bold text-mud-cloth-brown mb-2">Stay Connected</h3>
+            <p class="text-gray-600 mb-4">Sign up for updates, exclusive offers, and business resources.</p>
 
-            <div class="text-center" x-show="!formSubmitted">
-                <h3 class="text-2xl font-bold text-mud-cloth-brown mb-2">Get Early Access</h3>
-                <p class="text-gray-600 mb-4">Sign up to receive your discount code and updates about our launch.</p>
-
-                <form @submit.prevent="formSubmitted = true; setTimeout(() => { showNewsletterSignup = false; formSubmitted = false; }, 3000)">
-                    <div class="mb-4">
-                        <input
-                            type="email"
-                            x-model="email"
-                            placeholder="Your email address"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown focus:border-transparent"
-                            required>
-                    </div>
-                    <div class="mb-4">
-                        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown focus:border-transparent">
-                            <option value="" disabled selected>I am a...</option>
-                            <option value="business">Business Owner</option>
-                            <option value="client">Client</option>
-                        </select>
-                    </div>
-                    <button
-                        type="submit"
-                        class="bg-mud-cloth-brown hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-lg w-full transition duration-200">
-                        SIGN UP
-                    </button>
-                </form>
-            </div>
-
-            <div class="text-center" x-show="formSubmitted">
-                <div class="text-green-500 mb-2">
-                    <svg class="h-16 w-16 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+            <form @submit.prevent="formSubmitted = true; setTimeout(() => { showNewsletterSignup = false; formSubmitted = false; }, 3000)">
+                <div class="mb-4">
+                    <input
+                        type="email"
+                        x-model="email"
+                        placeholder="Your email address"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown focus:border-transparent"
+                        required>
                 </div>
-                <h3 class="text-2xl font-bold text-mud-cloth-brown mb-2">Thank You!</h3>
-                <p class="text-gray-600">Your discount code has been sent to your email.</p>
+                <div class="mb-4">
+                    <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mud-cloth-brown focus:border-transparent">
+                        <option value="" disabled selected>I am a...</option>
+                        <option value="business">Business Owner</option>
+                        <option value="customer">Customer/Client</option>
+                        <option value="supporter">Community Supporter</option>
+                    </select>
+                </div>
+                <div class="mb-4 flex items-center">
+                    <input type="checkbox" id="terms" class="mr-2" required>
+                    <label for="terms" class="text-sm text-gray-600">I agree to the <a href="#" class="text-ankara-red hover:underline">Terms</a> and <a href="#" class="text-ankara-red hover:underline">Privacy Policy</a></label>
+                </div>
+                <button
+                    type="submit"
+                    class="bg-mud-cloth-brown hover:bg-opacity-90 text-white font-bold py-3 px-6 rounded-lg w-full transition duration-200">
+                    SUBSCRIBE
+                </button>
+            </form>
+        </div>
+
+        <div class="text-center" x-show="formSubmitted">
+            <div class="text-green-500 mb-2">
+                <svg class="h-16 w-16 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
             </div>
+            <h3 class="text-2xl font-bold text-mud-cloth-brown mb-2">Thank You!</h3>
+            <p class="text-gray-600">You've been successfully subscribed to our newsletter.</p>
+            <button
+                @click="showNewsletterSignup = false; formSubmitted = false"
+                class="mt-4 bg-kente-gold hover:bg-opacity-90 text-white px-6 py-2 rounded-lg">
+                Close
+            </button>
         </div>
     </div>
+</div>
 
     <!-- Navigation Bar -->
     <nav class="bg-mud-cloth-brown text-white shadow-lg">
@@ -222,11 +235,11 @@
                     <p class="text-xl mb-8 max-w-lg">
                         Our appointment scheduling platform helps Black entrepreneurs streamline bookings and grow their business in Boston and beyond.
                     </p>
-                    <div class="space-x-4">
-                        <a href="register.html" class="bg-kente-gold hover:bg-opacity-90 text-white px-6 py-3 rounded-lg font-medium inline-block">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="register.html" class="bg-kente-gold hover:bg-opacity-90 text-white px-6 py-3 rounded-lg font-medium text-center">
                             Register Your Business
                         </a>
-                        <a href="#booking" @click="activeSection = 'booking'" class="bg-white hover:bg-gray-100 text-mud-cloth-brown px-6 py-3 rounded-lg font-medium inline-block">
+                        <a href="#booking" @click="activeSection = 'booking'" class="bg-white hover:bg-gray-100 text-mud-cloth-brown px-6 py-3 rounded-lg font-medium text-center">
                             Book an Appointment
                         </a>
                     </div>
@@ -390,13 +403,12 @@
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Business 1 -->
                 <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                    <img src="https://placehold.co/600x400?text=Business+Image" alt="Business Image" class="w-full h-48 object-cover">
+                    <img src="images/businesses/crown-glory.svg" alt="Crown & Glory Hair Studio" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-1">Crown & Glory Hair Studio</h3>
                         <p class="text-gray-500 text-sm mb-3">Dorchester</p>
                         <div class="flex mb-3">
                             <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57<svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                             </svg>
                             <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -419,7 +431,7 @@
 
                 <!-- Business 2 -->
                 <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                    <img src="https://placehold.co/600x400?text=Business+Image" alt="Business Image" class="w-full h-48 object-cover">
+                    <img src="images/businesses/soul-cutz.svg" alt="Soul Cutz Barbershop" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-1">Soul Cutz Barbershop</h3>
                         <p class="text-gray-500 text-sm mb-3">Roxbury</p>
@@ -447,7 +459,7 @@
 
                 <!-- Business 3 -->
                 <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                    <img src="https://placehold.co/600x400?text=Business+Image" alt="Business Image" class="w-full h-48 object-cover">
+                    <img src="images/businesses/legacy-legal.svg" alt="Legacy Legal Services" class="w-full h-48 object-cover">
                     <div class="p-6">
                         <h3 class="text-xl font-semibold text-gray-800 mb-1">Legacy Legal Services</h3>
                         <p class="text-gray-500 text-sm mb-3">Jamaica Plain</p>
@@ -664,11 +676,12 @@
                 <!-- Testimonial 1 -->
                 <div class="bg-white rounded-xl shadow-md p-6">
                     <div class="flex items-center mb-4">
-                        <img src="https://placehold.co/100x100?text=Photo" alt="Testimonial" class="w-12 h-12 rounded-full mr-4">
+                        <img src="images/headshots/maya-johnson.svg" alt="Maya Johnson" class="w-12 h-12 rounded-full mr-4">
                         <div>
                             <h4 class="font-semibold text-gray-800">Maya Johnson</h4>
                             <p class="text-gray-500 text-sm">Owner, Crown & Glory Hair Studio</p>
-                        </div></div>
+                        </div>
+                    </div>
                     <p class="text-gray-600 mb-4">"This platform has completely transformed how I schedule clients. I've reduced no-shows by 60% and my clients love being able to book 24/7 without calling the salon. My business has grown by 35% since I started using this system!"</p>
                     <div class="flex text-yellow-400">
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -692,7 +705,7 @@
                 <!-- Testimonial 2 -->
                 <div class="bg-white rounded-xl shadow-md p-6">
                     <div class="flex items-center mb-4">
-                        <img src="https://placehold.co/100x100?text=Photo" alt="Testimonial" class="w-12 h-12 rounded-full mr-4">
+                        <img src="images/headshots/marcus-williams.svg" alt="Marcus Williams" class="w-12 h-12 rounded-full mr-4">
                         <div>
                             <h4 class="font-semibold text-gray-800">Marcus Williams</h4>
                             <p class="text-gray-500 text-sm">Owner, Soul Cutz Barbershop</p>
@@ -721,7 +734,7 @@
                 <!-- Testimonial 3 -->
                 <div class="bg-white rounded-xl shadow-md p-6">
                     <div class="flex items-center mb-4">
-                        <img src="https://placehold.co/100x100?text=Photo" alt="Testimonial" class="w-12 h-12 rounded-full mr-4">
+                        <img src="images/headshots/tiana-roberts.svg" alt="Tiana Roberts" class="w-12 h-12 rounded-full mr-4">
                         <div>
                             <h4 class="font-semibold text-gray-800">Tiana Roberts</h4>
                             <p class="text-gray-500 text-sm">Owner, Legacy Legal Services</p>
@@ -900,122 +913,119 @@
                             placeholder="Type your message..."
                             class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ankara-red focus:border-transparent text-gray-800"
                     >
-                    <button
-                            type="submit"
-                            
-                                                <button type="submit" class="bg-kente-gold hover:bg-opacity-90 text-white px-4 py-2 rounded-r-lg">
-                                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            
-                                <!-- Footer -->
-                                <footer class="bg-mud-cloth-brown text-white pt-12 pb-6">
-                                    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                                        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                                            <div class="md:col-span-1">
-                                                <h3 class="text-xl font-bold mb-4">Boston Black Entrepreneurs</h3>
-                                                <p class="text-gray-300 mb-4">Empowering Black businesses in the Boston area since 2020.</p>
-                                                <div class="flex space-x-4">
-                                                    <a href="#" class="text-gray-300 hover:text-white">
-                                                        <i class="fab fa-facebook-f"></i>
-                                                    </a>
-                                                    <a href="#" class="text-gray-300 hover:text-white">
-                                                        <i class="fab fa-twitter"></i>
-                                                    </a>
-                                                    <a href="#" class="text-gray-300 hover:text-white">
-                                                        <i class="fab fa-instagram"></i>
-                                                    </a>
-                                                    <a href="#" class="text-gray-300 hover:text-white">
-                                                        <i class="fab fa-linkedin-in"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
-                                                <ul class="space-y-2">
-                                                    <li><a href="#" class="text-gray-300 hover:text-white">Home</a></li>
-                                                    <li><a href="#" class="text-gray-300 hover:text-white">About Us</a></li>
-                                                    <li><a href="#" class="text-gray-300 hover:text-white">Services</a></li>
-                                                    <li><a href="#" class="text-gray-300 hover:text-white">Register Business</a></li>
-                                                    <li><a href="#" class="text-gray-300 hover:text-white">Contact</a></li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-lg font-semibold mb-4">Business Categories</h4>
-                                                <ul class="space-y-2">
-                                                    <li><a href="#" class="text-gray-300 hover:text-white">Financial Services</a></li>
-                                                    <li><a href="#" class="text-gray-300 hover:text-white">Healthcare</a></li>
-                                                    <li><a href="#" class="text-gray-300 hover:text-white">Food & Beverage</a></li>
-                                                    <li><a href="#" class="text-gray-300 hover:text-white">Beauty & Wellness</a></li>
-                                                    <li><a href="#" class="text-gray-300 hover:text-white">Technology</a></li>
-                                                </ul>
-                                            </div>
-                                            <div>
-                                                <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
-                                                <address class="not-italic text-gray-300">
-                                                    <div class="flex items-start mb-2">
-                                                        <div class="mr-2 mt-1"><i class="fas fa-map-marker-alt"></i></div>
-                                                        <div>123 Main Street<br>Boston, MA 02110</div>
-                                                    </div>
-                                                    <div class="flex items-center mb-2">
-                                                        <div class="mr-2"><i class="fas fa-phone"></i></div>
-                                                        <div>(617) 555-1234</div>
-                                                    </div>
-                                                    <div class="flex items-center mb-2">
-                                                        <div class="mr-2"><i class="fas fa-envelope"></i></div>
-                                                        <div>info@bostonblackentrepreneurs.com</div>
-                                                    </div>
-                                                </address>
-                                            </div>
-                                        </div>
-                                        <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-                                            <p class="text-gray-300">&copy; 2025 Boston Black Entrepreneurs. All Rights Reserved.</p>
-                                            <div class="mt-4 md:mt-0">
-                                                <a href="#" class="text-gray-300 hover:text-white mx-2">Privacy Policy</a>
-                                                <a href="#" class="text-gray-300 hover:text-white mx-2">Terms of Service</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </footer>
-                            
-                                <script>
-                                    // In a real application, you would handle the form submission using AJAX
-                                    // This would typically include:
-                                    // 1. Form validation
-                                    // 2. API call to your backend
-                                    // 3. Email sending functionality
-                                    
-                                    // Example of email functionality (server-side pseudo-code):
-                                    /*
-                                    function sendConfirmationEmail(formData) {
-                                        const emailContent = `
-                                            <h2>Your Business Registration</h2>
-                                            <p>Thank you for registering with Boston Black Entrepreneurs!</p>
-                                            <h3>Registration Details:</h3>
-                                            <ul>
-                                                <li><strong>Company:</strong> ${formData.companyName}</li>
-                                                <li><strong>Business Type:</strong> ${formData.businessType}</li>
-                                                <li><strong>Services:</strong> ${formData.services}</li>
-                                                <li><strong>Contact:</strong> ${formData.contactName}</li>
-                                                <li><strong>Email:</strong> ${formData.email}</li>
-                                                <li><strong>Phone:</strong> ${formData.phone}</li>
-                                            </ul>
-                                            <p>We'll review your information and get back to you soon.</p>
-                                        `;
-                                        
-                                        sendEmail({
-                                            to: formData.email,
-                                            subject: "Your Business Registration Confirmation",
-                                            html: emailContent
-                                        });
-                                    }
-                                    */
-                                </script>
+                    <button type="submit" class="bg-kente-gold hover:bg-opacity-90 text-white px-4 py-2 rounded-r-lg">
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-mud-cloth-brown text-white pt-12 pb-6">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-1">
+                    <h3 class="text-xl font-bold mb-4">Boston Black Entrepreneurs</h3>
+                    <p class="text-gray-300 mb-4">Empowering Black businesses in the Boston area since 2020.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white">Home</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Services</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Register Business</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Business Categories</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white">Financial Services</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Healthcare</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Food & Beverage</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Beauty & Wellness</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white">Technology</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <address class="not-italic text-gray-300">
+                        <div class="flex items-start mb-2">
+                            <div class="mr-2 mt-1"><i class="fas fa-map-marker-alt"></i></div>
+                            <div>123 Main Street<br>Boston, MA 02110</div>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <div class="mr-2"><i class="fas fa-phone"></i></div>
+                            <div>(617) 555-1234</div>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <div class="mr-2"><i class="fas fa-envelope"></i></div>
+                            <div>info@bostonblackentrepreneurs.com</div>
+                        </div>
+                    </address>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-300">&copy; 2025 Boston Black Entrepreneurs. All Rights Reserved.</p>
+                <div class="mt-4 md:mt-0">
+                    <a href="#" class="text-gray-300 hover:text-white mx-2">Privacy Policy</a>
+                    <a href="#" class="text-gray-300 hover:text-white mx-2">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // In a real application, you would handle the form submission using AJAX
+        // This would typically include:
+        // 1. Form validation
+        // 2. API call to your backend
+        // 3. Email sending functionality
+        
+        // Example of email functionality (server-side pseudo-code):
+        /*
+        function sendConfirmationEmail(formData) {
+            const emailContent = `
+                <h2>Your Business Registration</h2>
+                <p>Thank you for registering with Boston Black Entrepreneurs!</p>
+                <h3>Registration Details:</h3>
+                <ul>
+                    <li><strong>Company:</strong> ${formData.companyName}</li>
+                    <li><strong>Business Type:</strong> ${formData.businessType}</li>
+                    <li><strong>Services:</strong> ${formData.services}</li>
+                    <li><strong>Contact:</strong> ${formData.contactName}</li>
+                    <li><strong>Email:</strong> ${formData.email}</li>
+                    <li><strong>Phone:</strong> ${formData.phone}</li>
+                </ul>
+                <p>We'll review your information and get back to you soon.</p>
+            `;
+            
+            sendEmail({
+                to: formData.email,
+                subject: "Your Business Registration Confirmation",
+                html: emailContent
+            });
+        }
+        */
+    </script>
 
 </body>
 </html>
